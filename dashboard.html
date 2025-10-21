@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard & Statistics - Monsif e-Municipality">
+    <title>Dashboard & Statistics - Monsif e-Municipality</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="navbar container">
+            <div class="logo">
+                <a href="index.html">Monsif e-Municipality</a>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="citizen.html" class="nav-link">Citizen Portal</a></li>
+                <li><a href="admin.html" class="nav-link">Admin Portal</a></li>
+                <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    ☰
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1 class="page-title fade-in">Municipal Dashboard</h1>
+                <p class="page-subtitle fade-in">
+                    Comprehensive statistics and analytics for municipal services
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Metrics Section -->
+    <section class="section" id="key-metrics">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Key Performance Indicators</h2>
+                <p class="section-subtitle">
+                    Real-time metrics showcasing municipal service performance
+                </p>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card fade-in">
+                    <div class="metric-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-number" id="total-requests-metric">0</div>
+                        <div class="metric-label">Total Requests</div>
+                        <div class="metric-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+12%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-card fade-in">
+                    <div class="metric-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-number" id="completed-requests-metric">0</div>
+                        <div class="metric-label">Completed Requests</div>
+                        <div class="metric-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+8%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-card fade-in">
+                    <div class="metric-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-number" id="total-complaints-metric">0</div>
+                        <div class="metric-label">Complaints Received</div>
+                        <div class="metric-change negative">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>-5%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-card fade-in">
+                    <div class="metric-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-number" id="avg-processing-time">0</div>
+                        <div class="metric-label">Avg. Processing Time (Days)</div>
+                        <div class="metric-change positive">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>-15%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-card fade-in">
+                    <div class="metric-icon">
+                        <i class="fas fa-vote-yea"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-number" id="poll-participation">0</div>
+                        <div class="metric-label">Poll Participation</div>
+                        <div class="metric-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+25%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-card fade-in">
+                    <div class="metric-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-number" id="revenue-collected">0</div>
+                        <div class="metric-label">Revenue Collected (LBP)</div>
+                        <div class="metric-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+18%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="section" id="charts">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Service Analytics</h2>
+                <p class="section-subtitle">
+                    Visual representation of municipal service data and trends
+                </p>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-card fade-in">
+                    <div class="chart-header">
+                        <h3>Request Status Distribution</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn active" data-chart="requests">Requests</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="requests-chart" width="400" height="300"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #ffc107;"></span>
+                            <span>Pending</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #28a745;"></span>
+                            <span>Approved</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #007bff;"></span>
+                            <span>Completed</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #dc3545;"></span>
+                            <span>Rejected</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card fade-in">
+                    <div class="chart-header">
+                        <h3>Complaint Resolution</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn active" data-chart="complaints">Complaints</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="complaints-chart" width="400" height="300"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #ffc107;"></span>
+                            <span>Submitted</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #007bff;"></span>
+                            <span>In Progress</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #28a745;"></span>
+                            <span>Resolved</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card fade-in">
+                    <div class="chart-header">
+                        <h3>Community Engagement</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn active" data-chart="polls">Polls</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="polls-chart" width="400" height="300"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #007bff;"></span>
+                            <span>Total Votes</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card fade-in">
+                    <div class="chart-header">
+                        <h3>Financial Overview</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn active" data-chart="financial">Financial</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="financial-chart" width="400" height="300"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #28a745;"></span>
+                            <span>Revenue</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #dc3545;"></span>
+                            <span>Expenses</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #007bff;"></span>
+                            <span>Budget</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Performance Section -->
+    <section class="section" id="performance">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Service Performance</h2>
+                <p class="section-subtitle">
+                    Detailed breakdown of municipal service efficiency and citizen satisfaction
+                </p>
+            </div>
+            
+            <div class="performance-grid">
+                <div class="performance-card fade-in">
+                    <div class="performance-header">
+                        <h3>Request Processing Times</h3>
+                        <div class="performance-score">92%</div>
+                    </div>
+                    <div class="performance-details">
+                        <div class="performance-item">
+                            <span class="service-name">Building Permits</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                            <span class="service-time">5.2 days</span>
+                        </div>
+                        
+                        <div class="performance-item">
+                            <span class="service-name">Business Licenses</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 92%"></div>
+                            </div>
+                            <span class="service-time">3.8 days</span>
+                        </div>
+                        
+                        <div class="performance-item">
+                            <span class="service-name">Certificates</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 98%"></div>
+                            </div>
+                            <span class="service-time">2.1 days</span>
+                        </div>
+                        
+                        <div class="performance-item">
+                            <span class="service-name">Municipal Services</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 88%"></div>
+                            </div>
+                            <span class="service-time">4.5 days</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="performance-card fade-in">
+                    <div class="performance-header">
+                        <h3>Citizen Satisfaction</h3>
+                        <div class="performance-score">4.7/5</div>
+                    </div>
+                    <div class="satisfaction-details">
+                        <div class="satisfaction-item">
+                            <div class="satisfaction-label">Service Quality</div>
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="rating-percentage">94%</div>
+                        </div>
+                        
+                        <div class="satisfaction-item">
+                            <div class="satisfaction-label">Response Time</div>
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <div class="rating-percentage">87%</div>
+                        </div>
+                        
+                        <div class="satisfaction-item">
+                            <div class="satisfaction-label">Digital Platform</div>
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="rating-percentage">96%</div>
+                        </div>
+                        
+                        <div class="satisfaction-item">
+                            <div class="satisfaction-label">Overall Experience</div>
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="rating-percentage">91%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="performance-card fade-in">
+                    <div class="performance-header">
+                        <h3>Digital Adoption</h3>
+                        <div class="performance-score">78%</div>
+                    </div>
+                    <div class="adoption-details">
+                        <div class="adoption-item">
+                            <div class="adoption-label">Online Requests</div>
+                            <div class="adoption-bar">
+                                <div class="adoption-fill" style="width: 78%"></div>
+                            </div>
+                            <div class="adoption-percentage">78%</div>
+                        </div>
+                        
+                        <div class="adoption-item">
+                            <div class="adoption-label">Online Payments</div>
+                            <div class="adoption-bar">
+                                <div class="adoption-fill" style="width: 65%"></div>
+                            </div>
+                            <div class="adoption-percentage">65%</div>
+                        </div>
+                        
+                        <div class="adoption-item">
+                            <div class="adoption-label">Digital Complaints</div>
+                            <div class="adoption-bar">
+                                <div class="adoption-fill" style="width: 82%"></div>
+                            </div>
+                            <div class="adoption-percentage">82%</div>
+                        </div>
+                        
+                        <div class="adoption-item">
+                            <div class="adoption-label">Poll Participation</div>
+                            <div class="adoption-bar">
+                                <div class="adoption-fill" style="width: 71%"></div>
+                            </div>
+                            <div class="adoption-percentage">71%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trends Section -->
+    <section class="section" id="trends">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Monthly Trends</h2>
+                <p class="section-subtitle">
+                    Track monthly performance and identify improvement opportunities
+                </p>
+            </div>
+            
+            <div class="trends-container">
+                <div class="trend-card fade-in">
+                    <div class="trend-header">
+                        <h3>Request Volume Trends</h3>
+                        <div class="trend-period">
+                            <select id="trend-period" class="form-select">
+                                <option value="6">Last 6 Months</option>
+                                <option value="12">Last 12 Months</option>
+                                <option value="24">Last 24 Months</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="trend-chart">
+                        <canvas id="trends-chart" width="800" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Monsif e-Municipality</h3>
+                    <p>Data-driven municipal management and citizen services</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="citizen.html">Citizen Portal</a></li>
+                        <li><a href="admin.html">Admin Portal</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Information</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-phone"></i> +961-XX-XXXXXX</p>
+                        <p><i class="fas fa-envelope"></i> info@monsif.gov.lb</p>
+                        <p><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 4:00 PM</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Monsif Municipality. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    
+    <!-- Page-specific styles -->
+    <style>
+        /* Page-specific styles */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-white) 0%, var(--secondary-grey) 100%);
+            padding: 120px 0 var(--spacing-xl);
+            text-align: center;
+        }
+        
+        .page-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .page-subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--text-light);
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+        
+        .metric-card {
+            background: var(--primary-white);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--accent-grey);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+        }
+        
+        .metric-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-green) 100%);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-2xl);
+            color: var(--primary-white);
+        }
+        
+        .metric-content {
+            flex: 1;
+        }
+        
+        .metric-number {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .metric-label {
+            font-size: var(--font-size-lg);
+            color: var(--text-light);
+            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .metric-change {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+        
+        .metric-change.positive {
+            color: var(--accent-green);
+        }
+        
+        .metric-change.negative {
+            color: #dc3545;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+        
+        .chart-card {
+            background: var(--primary-white);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--accent-grey);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .chart-header h3 {
+            margin: 0;
+            color: var(--text-dark);
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        .chart-btn {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: var(--secondary-grey);
+            border: 1px solid var(--accent-grey);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .chart-btn.active {
+            background: var(--accent-blue);
+            color: var(--primary-white);
+            border-color: var(--accent-blue);
+        }
+        
+        .chart-container {
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+        }
+        
+        .chart-container canvas {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            justify-content: center;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: var(--font-size-sm);
+            color: var(--text-light);
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+        
+        .performance-card {
+            background: var(--primary-white);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--accent-grey);
+        }
+        
+        .performance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .performance-header h3 {
+            margin: 0;
+            color: var(--text-dark);
+        }
+        
+        .performance-score {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+        
+        .performance-details,
+        .satisfaction-details,
+        .adoption-details {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+        
+        .performance-item,
+        .satisfaction-item,
+        .adoption-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+        
+        .service-name,
+        .satisfaction-label,
+        .adoption-label {
+            min-width: 120px;
+            font-size: var(--font-size-sm);
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .progress-bar,
+        .adoption-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--accent-grey);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+        
+        .progress-fill,
+        .adoption-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-green) 100%);
+            transition: width var(--transition-slow);
+        }
+        
+        .service-time {
+            min-width: 60px;
+            font-size: var(--font-size-sm);
+            color: var(--text-light);
+            text-align: right;
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 2px;
+            color: #ffc107;
+        }
+        
+        .rating-percentage,
+        .adoption-percentage {
+            min-width: 40px;
+            font-size: var(--font-size-sm);
+            color: var(--text-light);
+            text-align: right;
+        }
+        
+        .trends-container {
+            margin-bottom: var(--spacing-3xl);
+        }
+        
+        .trend-card {
+            background: var(--primary-white);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--accent-grey);
+        }
+        
+        .trend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .trend-header h3 {
+            margin: 0;
+            color: var(--text-dark);
+        }
+        
+        .trend-period select {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--accent-grey);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-sm);
+        }
+        
+        .trend-chart {
+            text-align: center;
+        }
+        
+        .trend-chart canvas {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .performance-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-md);
+            }
+            
+            .trend-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-md);
+            }
+            
+            .performance-item,
+            .satisfaction-item,
+            .adoption-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-sm);
+            }
+            
+            .service-name,
+            .satisfaction-label,
+            .adoption-label {
+                min-width: auto;
+            }
+            
+            .progress-bar,
+            .adoption-bar {
+                width: 100%;
+            }
+        }
+    </style>
+    
+    <!-- Page-specific JavaScript -->
+    <script>
+        // Dashboard-specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboardCharts();
+            updateDashboardMetrics();
+            initializeTrendsChart();
+        });
+        
+        function updateDashboardMetrics() {
+            // Update metrics with animated counters
+            const metrics = {
+                'total-requests-metric': mockData.requests.length,
+                'completed-requests-metric': mockData.requests.filter(r => r.status === 'Completed').length,
+                'total-complaints-metric': mockData.complaints.length,
+                'avg-processing-time': 3.2,
+                'poll-participation': mockData.polls.reduce((sum, poll) => sum + poll.totalVotes, 0),
+                'revenue-collected': 150000
+            };
+            
+            Object.entries(metrics).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    animateCounter(element, value);
+                }
+            });
+        }
+        
+        function animateCounter(element, target) {
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                if (target > 1000) {
+                    element.textContent = Math.floor(current).toLocaleString();
+                } else if (target < 1) {
+                    element.textContent = current.toFixed(1);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+        
+        function initializeTrendsChart() {
+            const canvas = document.getElementById('trends-chart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            const requestsData = [45, 52, 48, 61, 55, 67];
+            const complaintsData = [12, 15, 11, 18, 14, 16];
+            
+            drawTrendsChart(ctx, canvas, months, requestsData, complaintsData);
+        }
+        
+        function drawTrendsChart(ctx, canvas, months, requestsData, complaintsData) {
+            const padding = 40;
+            const chartWidth = canvas.width - padding * 2;
+            const chartHeight = canvas.height - padding * 2;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw axes
+            ctx.strokeStyle = '#e9ecef';
+            ctx.lineWidth = 1;
+            
+            // Y-axis
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, canvas.height - padding);
+            ctx.stroke();
+            
+            // X-axis
+            ctx.beginPath();
+            ctx.moveTo(padding, canvas.height - padding);
+            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.stroke();
+            
+            // Draw grid lines
+            ctx.strokeStyle = '#f8f9fa';
+            ctx.lineWidth = 1;
+            
+            for (let i = 1; i <= 5; i++) {
+                const y = padding + (chartHeight / 5) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(canvas.width - padding, y);
+                ctx.stroke();
+            }
+            
+            // Draw data lines
+            const maxValue = Math.max(...requestsData, ...complaintsData);
+            
+            // Requests line
+            ctx.strokeStyle = '#007bff';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            requestsData.forEach((value, index) => {
+                const x = padding + (chartWidth / (requestsData.length - 1)) * index;
+                const y = canvas.height - padding - (value / maxValue) * chartHeight;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+                
+                // Draw points
+                ctx.fillStyle = '#007bff';
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+            
+            ctx.stroke();
+            
+            // Complaints line
+            ctx.strokeStyle = '#dc3545';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            complaintsData.forEach((value, index) => {
+                const x = padding + (chartWidth / (complaintsData.length - 1)) * index;
+                const y = canvas.height - padding - (value / maxValue) * chartHeight;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+                
+                // Draw points
+                ctx.fillStyle = '#dc3545';
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+            
+            ctx.stroke();
+            
+            // Draw labels
+            ctx.fillStyle = '#6c757d';
+            ctx.font = '12px Poppins';
+            ctx.textAlign = 'center';
+            
+            months.forEach((month, index) => {
+                const x = padding + (chartWidth / (months.length - 1)) * index;
+                ctx.fillText(month, x, canvas.height - padding + 20);
+            });
+            
+            // Draw legend
+            ctx.fillStyle = '#007bff';
+            ctx.fillRect(canvas.width - 120, padding + 20, 12, 12);
+            ctx.fillStyle = '#2c3e50';
+            ctx.textAlign = 'left';
+            ctx.fillText('Requests', canvas.width - 100, padding + 30);
+            
+            ctx.fillStyle = '#dc3545';
+            ctx.fillRect(canvas.width - 120, padding + 40, 12, 12);
+            ctx.fillStyle = '#2c3e50';
+            ctx.fillText('Complaints', canvas.width - 100, padding + 50);
+        }
+        
+        // Update trends when period changes
+        document.getElementById('trend-period').addEventListener('change', function() {
+            const period = this.value;
+            // In a real application, you would fetch new data based on the period
+            initializeTrendsChart();
+        });
+    </script>
+</body>
+</html>

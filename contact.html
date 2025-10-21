@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Us - Monsif e-Municipality">
+    <title>Contact Us - Monsif e-Municipality</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="navbar container">
+            <div class="logo">
+                <a href="index.html">Monsif e-Municipality</a>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="citizen.html" class="nav-link">Citizen Portal</a></li>
+                <li><a href="admin.html" class="nav-link">Admin Portal</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="contact.html" class="nav-link active">Contact</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    ☰
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1 class="page-title fade-in">Contact Us</h1>
+                <p class="page-subtitle fade-in">
+                    Get in touch with Monsif Municipality for assistance and information
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Information Section -->
+    <section class="section" id="contact-info">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Get in Touch</h2>
+                <p class="section-subtitle">
+                    Multiple ways to reach us for assistance and information
+                </p>
+            </div>
+            
+            <div class="contact-grid">
+                <div class="contact-card fade-in">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-content">
+                        <h3>Visit Us</h3>
+                        <p>Monsif Municipality Building<br>
+                        Main Street, Monsif<br>
+                        Lebanon</p>
+                        <a href="#map" class="btn btn-outline">View on Map</a>
+                    </div>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-content">
+                        <h3>Call Us</h3>
+                        <p>Main Office: +961-XX-XXXXXX<br>
+                        Emergency: +961-XX-XXXXXX<br>
+                        Fax: +961-XX-XXXXXX</p>
+                        <a href="tel:+961XXXXXXXXX" class="btn btn-outline">Call Now</a>
+                    </div>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-content">
+                        <h3>Email Us</h3>
+                        <p>General: info@monsif.gov.lb<br>
+                        Support: support@monsif.gov.lb<br>
+                        Admin: admin@monsif.gov.lb</p>
+                        <a href="mailto:info@monsif.gov.lb" class="btn btn-outline">Send Email</a>
+                    </div>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="contact-content">
+                        <h3>Office Hours</h3>
+                        <p>Monday - Friday: 8:00 AM - 4:00 PM<br>
+                        Saturday: 9:00 AM - 1:00 PM<br>
+                        Sunday: Closed</p>
+                        <a href="#hours" class="btn btn-outline">View Schedule</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="section" id="contact-form">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Send us a Message</h2>
+                <p class="section-subtitle">
+                    Fill out the form below and we'll get back to you within 24 hours
+                </p>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card fade-in">
+                    <h3>Contact Form</h3>
+                    <form id="contact-form-element" data-form-type="contact">
+                        <div class="form-group">
+                            <label for="contactName" class="form-label">Full Name *</label>
+                            <input type="text" id="contactName" name="name" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactEmail" class="form-label">Email Address *</label>
+                            <input type="email" id="contactEmail" name="email" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactPhone" class="form-label">Phone Number</label>
+                            <input type="tel" id="contactPhone" name="phone" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactSubject" class="form-label">Subject *</label>
+                            <select id="contactSubject" name="subject" class="form-select" required>
+                                <option value="">Select a subject</option>
+                                <option value="General Inquiry">General Inquiry</option>
+                                <option value="Service Request">Service Request</option>
+                                <option value="Complaint">Complaint</option>
+                                <option value="Feedback">Feedback</option>
+                                <option value="Technical Support">Technical Support</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contactMessage" class="form-label">Message *</label>
+                            <textarea id="contactMessage" name="message" class="form-textarea" 
+                                placeholder="Please provide detailed information about your inquiry" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="contactNewsletter" name="newsletter">
+                                <span class="checkmark"></span>
+                                Subscribe to our newsletter for municipal updates
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="card fade-in">
+                    <h3>Why Contact Us?</h3>
+                    <div class="contact-reasons">
+                        <div class="reason-item">
+                            <div class="reason-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div class="reason-content">
+                                <h4>General Questions</h4>
+                                <p>Get answers about municipal services, procedures, and requirements</p>
+                            </div>
+                        </div>
+                        
+                        <div class="reason-item">
+                            <div class="reason-icon">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="reason-content">
+                                <h4>Technical Support</h4>
+                                <p>Need help with the digital platform or online services?</p>
+                            </div>
+                        </div>
+                        
+                        <div class="reason-item">
+                            <div class="reason-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div class="reason-content">
+                                <h4>Suggestions</h4>
+                                <p>Share your ideas for improving municipal services</p>
+                            </div>
+                        </div>
+                        
+                        <div class="reason-item">
+                            <div class="reason-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="reason-content">
+                                <h4>Report Issues</h4>
+                                <p>Report problems with services or infrastructure</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="section" id="map">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Find Us</h2>
+                <p class="section-subtitle">
+                    Visit our municipal office located in the heart of Monsif
+                </p>
+            </div>
+            
+            <div class="map-container fade-in">
+                <div class="map-placeholder">
+                    <div class="map-content">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <h3>Monsif Municipality</h3>
+                        <p>Main Street, Monsif, Lebanon</p>
+                        <div class="map-actions">
+                            <button class="btn btn-primary" onclick="openGoogleMaps()">
+                                <i class="fas fa-external-link-alt"></i>
+                                Open in Google Maps
+                            </button>
+                            <button class="btn btn-secondary" onclick="getDirections()">
+                                <i class="fas fa-directions"></i>
+                                Get Directions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section" id="faq">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-subtitle">
+                    Quick answers to common questions about municipal services
+                </p>
+            </div>
+            
+            <div class="faq-container">
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>How can I submit a request online?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You can submit requests through our Citizen Portal. Simply visit the citizen portal, fill out the request form with your details and required information, and submit it online. You'll receive a confirmation email with your request ID for tracking.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>How long does it take to process requests?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Processing times vary by request type. Building permits typically take 5-10 business days, business licenses take 3-7 days, and certificates are usually processed within 2-5 days. You can track your request status online using your request ID.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>Can I pay municipal fees online?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we offer secure online payment options for municipal fees, taxes, and fines. You can pay using credit cards, bank transfers, or mobile payment methods. All payments are processed through secure, encrypted channels.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>How do I report a municipal issue?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You can report issues through our complaint system in the Citizen Portal. Provide detailed information about the issue, upload photos if available, and specify the location. Our team will investigate and resolve the issue within 48 hours.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>What are your office hours?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our office is open Monday through Friday from 8:00 AM to 4:00 PM, and Saturday from 9:00 AM to 1:00 PM. We're closed on Sundays and public holidays. Online services are available 24/7.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <h3>How can I participate in community polls?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Active polls are available in the Citizen Portal. Simply visit the polls section, read the question and options, and cast your vote. Your participation helps shape municipal decisions and policies.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Contact Section -->
+    <section class="section" id="emergency">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Emergency Contacts</h2>
+                <p class="section-subtitle">
+                    Important emergency numbers for urgent municipal issues
+                </p>
+            </div>
+            
+            <div class="emergency-grid">
+                <div class="emergency-card fade-in">
+                    <div class="emergency-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="emergency-content">
+                        <h3>Municipal Emergency</h3>
+                        <p>For urgent municipal issues requiring immediate attention</p>
+                        <div class="emergency-number">+961-XX-XXXXXX</div>
+                        <a href="tel:+961XXXXXXXXX" class="btn btn-primary">Call Now</a>
+                    </div>
+                </div>
+                
+                <div class="emergency-card fade-in">
+                    <div class="emergency-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="emergency-content">
+                        <h3>Fire Department</h3>
+                        <p>For fire emergencies and fire safety issues</p>
+                        <div class="emergency-number">175</div>
+                        <a href="tel:175" class="btn btn-primary">Call Now</a>
+                    </div>
+                </div>
+                
+                <div class="emergency-card fade-in">
+                    <div class="emergency-icon">
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <div class="emergency-content">
+                        <h3>Medical Emergency</h3>
+                        <p>For medical emergencies and ambulance services</p>
+                        <div class="emergency-number">140</div>
+                        <a href="tel:140" class="btn btn-primary">Call Now</a>
+                    </div>
+                </div>
+                
+                <div class="emergency-card fade-in">
+                    <div class="emergency-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="emergency-content">
+                        <h3>Police</h3>
+                        <p>For security issues and law enforcement</p>
+                        <div class="emergency-number">112</div>
+                        <a href="tel:112" class="btn btn-primary">Call Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Monsif e-Municipality</h3>
+                    <p>Your trusted partner in municipal services and community development</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="citizen.html">Citizen Portal</a></li>
+                        <li><a href="admin.html">Admin Portal</a></li>
+                        <li><a href="dashboard.html">Statistics</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Information</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Monsif Municipality, Lebanon</p>
+                        <p><i class="fas fa-phone"></i> +961-XX-XXXXXX</p>
+                        <p><i class="fas fa-envelope"></i> info@monsif.gov.lb</p>
+                        <p><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 4:00 PM</p>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Monsif Municipality. All rights reserved. | 
+                   <a href="#">Privacy Policy</a> | 
+                   <a href="#">Terms of Service</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for notifications -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Modal Title</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modal-content">
+                Modal content goes here
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    
+    <!-- Page-specific styles -->
+    <style>
+        /* Page-specific styles */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-white) 0%, var(--secondary-grey) 100%);
+            padding: 120px 0 var(--spacing-xl);
+            text-align: center;
+        }
+        
+        .page-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .page-subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--text-light);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+        
+        .contact-card {
+            background: var(--primary-white);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--accent-grey);
+            text-align: center;
+            transition: all var(--transition-normal);
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px var(--shadow-medium);
+        }
+        
+        .contact-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-green) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-2xl);
+            color: var(--primary-white);
+            margin: 0 auto var(--spacing-lg);
+        }
+        
+        .contact-content h3 {
+            margin-bottom: var(--spacing-md);
+            color: var(--text-dark);
+        }
+        
+        .contact-content p {
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .contact-reasons {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+        
+        .reason-item {
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: flex-start;
+        }
+        
+        .reason-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-white);
+            flex-shrink: 0;
+        }
+        
+        .reason-content h4 {
+            margin-bottom: var(--spacing-xs);
+            color: var(--text-dark);
+        }
+        
+        .reason-content p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: var(--font-size-sm);
+        }
+        
+        .map-container {
+            margin-bottom: var(--spacing-3xl);
+        }
+        
+        .map-placeholder {
+            height: 400px;
+            background: var(--secondary-grey);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed var(--accent-grey);
+        }
+        
+        .map-content {
+            text-align: center;
+            color: var(--text-light);
+        }
+        
+        .map-content i {
+            font-size: var(--font-size-4xl);
+            margin-bottom: var(--spacing-lg);
+            color: var(--accent-blue);
+        }
+        
+        .map-content h3 {
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-dark);
+        }
+        
+        .map-content p {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .map-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: var(--primary-white);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-md);
+            box-shadow: 0 2px 10px var(--shadow-light);
+            border: 1px solid var(--accent-grey);
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all var(--transition-fast);
+        }
+        
+        .faq-question:hover {
+            background: var(--secondary-grey);
+        }
+        
+        .faq-question h3 {
+            margin: 0;
+            color: var(--text-dark);
+            font-size: var(--font-size-lg);
+        }
+        
+        .faq-question i {
+            color: var(--accent-blue);
+            transition: transform var(--transition-fast);
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            padding: 0 var(--spacing-lg) var(--spacing-lg);
+            color: var(--text-light);
+            line-height: 1.6;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-normal);
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+        }
+        
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-xl);
+        }
+        
+        .emergency-card {
+            background: var(--primary-white);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--accent-grey);
+            text-align: center;
+            transition: all var(--transition-normal);
+        }
+        
+        .emergency-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px var(--shadow-medium);
+        }
+        
+        .emergency-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-2xl);
+            color: var(--primary-white);
+            margin: 0 auto var(--spacing-lg);
+        }
+        
+        .emergency-content h3 {
+            margin-bottom: var(--spacing-md);
+            color: var(--text-dark);
+        }
+        
+        .emergency-content p {
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-light);
+            font-size: var(--font-size-sm);
+        }
+        
+        .emergency-number {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            color: #dc3545;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            display: none;
+        }
+        
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--accent-grey);
+            border-radius: var(--radius-sm);
+            position: relative;
+            transition: all var(--transition-fast);
+        }
+        
+        .checkbox-label input[type="checkbox"]:checked + .checkmark {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+        
+        .checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--primary-white);
+            font-size: var(--font-size-xs);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .emergency-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .map-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .faq-question h3 {
+                font-size: var(--font-size-base);
+            }
+        }
+    </style>
+    
+    <!-- Page-specific JavaScript -->
+    <script>
+        // FAQ functionality
+        function toggleFAQ(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+        
+        // Map functionality
+        function openGoogleMaps() {
+            const address = "Monsif Municipality, Lebanon";
+            const encodedAddress = encodeURIComponent(address);
+            const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+            window.open(googleMapsUrl, '_blank');
+        }
+        
+        function getDirections() {
+            const address = "Monsif Municipality, Lebanon";
+            const encodedAddress = encodeURIComponent(address);
+            const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`;
+            window.open(directionsUrl, '_blank');
+        }
+        
+        // Smooth scroll for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            const anchorLinks = document.querySelectorAll('a[href^="#"]');
+            anchorLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        const headerHeight = document.querySelector('.header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
