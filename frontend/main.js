@@ -2,19 +2,75 @@
 
 // ===== GLOBAL VARIABLES =====
 let currentUser = null;
-let mockData = {
-    requests: [],
-    complaints: [],
-    polls: [],
-    news: []
+let authToken = null;
+const API_BASE_URL = 'http://localhost:3000/api';
+
+// API Helper Functions
+const api = {
+    async request(endpoint, options = {}) {
+        const url = `${API_BASE_URL}${endpoint}`;
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
+                ...options.headers
+            },
+            ...options
+        };
+
+        try {
+            const response = await fetch(url, config);
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.message || 'API request failed');
+            }
+            
+            return data;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
+        }
+    },
+
+    async uploadFiles(endpoint, files) {
+        const url = `${API_BASE_URL}${endpoint}`;
+        const formData = new FormData();
+        
+        files.forEach(file => {
+            formData.append('files', file);
+        });
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    ...(authToken && { 'Authorization': `Bearer ${authToken}` })
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.message || 'File upload failed');
+            }
+            
+            return data;
+        } catch (error) {
+            console.error('Upload Error:', error);
+            throw error;
+        }
+    }
 };
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
-    loadMockData();
+    checkAuthStatus();
     setupEventListeners();
     initializeAnimations();
+    initializePage();
 });
 
 // ===== APP INITIALIZATION =====
@@ -41,42 +97,63 @@ function initializeApp() {
     console.log('Monsif e-Municipality initialized successfully');
 }
 
-// ===== MOCK DATA MANAGEMENT =====
-function loadMockData() {
-    // Load from localStorage or create default data
-    const savedData = localStorage.getItem('municipalityData');
-    if (savedData) {
-        mockData = JSON.parse(savedData);
-    } else {
-        createDefaultMockData();
-        saveMockData();
+// ===== AUTHENTICATION MANAGEMENT =====
+function checkAuthStatus() {
+    const savedUser = localStorage.getItem('currentUser');
+    const savedToken = localStorage.getItem('authToken');
+    
+    if (savedUser && savedToken) {
+        currentUser = JSON.parse(savedUser);
+        authToken = savedToken;
+        
+        // Verify token is still valid
+        api.request('/auth/me')
+            .then(data => {
+                currentUser = data.data.user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            })
+            .catch(() => {
+                // Token expired or invalid
+                logout();
+            });
     }
 }
 
-function createDefaultMockData() {
-    mockData = {
-        requests: [
-            { id: 'REQ001', type: 'Building Permit', status: 'Approved', date: '2024-01-15', citizen: 'Ahmad Khoury' },
-            { id: 'REQ002', type: 'Business License', status: 'Pending', date: '2024-01-20', citizen: 'Fatima Mansour' },
-            { id: 'REQ003', type: 'Marriage Certificate', status: 'Completed', date: '2024-01-10', citizen: 'Omar Saad' }
-        ],
-        complaints: [
-            { id: 'COMP001', type: 'Road Maintenance', status: 'In Progress', date: '2024-01-18', citizen: 'Layla Fadel', description: 'Potholes on Main Street' },
-            { id: 'COMP002', type: 'Water Supply', status: 'Resolved', date: '2024-01-12', citizen: 'Hassan Younes', description: 'Water pressure issues' }
-        ],
-        polls: [
-            { id: 'POLL001', question: 'Should we build a new community center?', options: ['Yes', 'No'], votes: [45, 23], totalVotes: 68, active: true },
-            { id: 'POLL002', question: 'What time should the municipal office close?', options: ['4 PM', '5 PM', '6 PM'], votes: [12, 35, 18], totalVotes: 65, active: false }
-        ],
-        news: [
-            { id: 'NEWS001', title: 'New Road Construction Project', content: 'Starting next month, we will begin construction on the new bypass road...', date: '2024-01-22', author: 'Mayor Office' },
-            { id: 'NEWS002', title: 'Community Cleanup Day', content: 'Join us this Saturday for our monthly community cleanup initiative...', date: '2024-01-20', author: 'Environmental Committee' }
-        ]
-    };
+function login(email, password) {
+    return api.request('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+    }).then(data => {
+        currentUser = data.data.user;
+        authToken = data.data.token;
+        
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        localStorage.setItem('authToken', authToken);
+        
+        return data;
+    });
 }
 
-function saveMockData() {
-    localStorage.setItem('municipalityData', JSON.stringify(mockData));
+function register(userData) {
+    return api.request('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(userData)
+    }).then(data => {
+        currentUser = data.data.user;
+        authToken = data.data.token;
+        
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        localStorage.setItem('authToken', authToken);
+        
+        return data;
+    });
+}
+
+function logout() {
+    currentUser = null;
+    authToken = null;
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('authToken');
 }
 
 // ===== MOBILE MENU =====
@@ -235,19 +312,22 @@ function clearFieldError(field) {
 }
 
 // ===== FORM SUBMISSION HANDLING =====
-function handleFormSubmission(form) {
+async function handleFormSubmission(form) {
     const formData = new FormData(form);
-    const formType = form.dataset.formType || 'general';
+    const formType = form.dataset.formType || form.id || 'general';
     
     showLoading(form);
     
-    // Simulate API call
-    setTimeout(() => {
-        hideLoading(form);
-        
+    try {
         switch (formType) {
             case 'request':
-                handleRequestSubmission(formData);
+                await handleRequestSubmission(formData);
+                break;
+            case 'citizen-login-form':
+                await handleCitizenLogin(formData);
+                break;
+            case 'citizen-register-form':
+                await handleCitizenRegister(formData);
                 break;
             case 'complaint':
                 handleComplaintSubmission(formData);
@@ -256,7 +336,7 @@ function handleFormSubmission(form) {
                 handleContactSubmission(formData);
                 break;
             case 'admin-login':
-                handleAdminLogin(formData);
+                await handleAdminLogin(formData);
                 break;
             case 'news':
                 handleNewsSubmission(formData);
@@ -269,23 +349,110 @@ function handleFormSubmission(form) {
         }
         
         form.reset();
-    }, 1500);
+    } catch (error) {
+        console.error('Form submission error:', error);
+    } finally {
+        hideLoading(form);
+    }
 }
 
-function handleRequestSubmission(formData) {
-    const newRequest = {
-        id: 'REQ' + String(mockData.requests.length + 1).padStart(3, '0'),
-        type: formData.get('requestType'),
-        status: 'Pending',
-        date: new Date().toISOString().split('T')[0],
-        citizen: formData.get('citizenName'),
-        description: formData.get('description')
+async function handleCitizenLogin(formData) {
+    const email = formData.get('email');
+    const password = formData.get('password');
+    
+    try {
+        const response = await login(email, password);
+        
+        if (response.data.user.role === 'CITIZEN') {
+            showSuccessMessage('Login successful! Welcome to the citizen portal.');
+            
+            // Show citizen services
+            const authSection = document.getElementById('auth');
+            const requestsSection = document.getElementById('requests');
+            
+            if (authSection) authSection.style.display = 'none';
+            if (requestsSection) requestsSection.style.display = 'block';
+            
+            // Update navigation
+            const navItems = document.querySelectorAll('.service-nav-item');
+            navItems.forEach(item => item.style.display = 'block');
+            
+            // Add logout button
+            addLogoutButton();
+        } else {
+            showErrorMessage('Access denied. Citizen account required.');
+            logout();
+        }
+    } catch (error) {
+        showErrorMessage(error.message || 'Login failed');
+    }
+}
+
+async function handleCitizenRegister(formData) {
+    const userData = {
+        fullName: formData.get('fullName'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+        role: 'CITIZEN'
     };
     
-    mockData.requests.push(newRequest);
-    saveMockData();
-    
-    showSuccessMessage(`Request submitted successfully! Your request ID is: ${newRequest.id}`);
+    try {
+        const response = await register(userData);
+        showSuccessMessage('Registration successful! Welcome to the citizen portal.');
+        
+        // Show citizen services
+        const authSection = document.getElementById('auth');
+        const requestsSection = document.getElementById('requests');
+        
+        if (authSection) authSection.style.display = 'none';
+        if (requestsSection) requestsSection.style.display = 'block';
+        
+        // Update navigation
+        const navItems = document.querySelectorAll('.service-nav-item');
+        navItems.forEach(item => item.style.display = 'block');
+        
+        // Add logout button
+        addLogoutButton();
+    } catch (error) {
+        showErrorMessage(error.message || 'Registration failed');
+    }
+}
+
+async function handleRequestSubmission(formData) {
+    try {
+        const requestData = {
+            type: formData.get('requestType'),
+            description: formData.get('description')
+        };
+
+        const response = await api.request('/requests', {
+            method: 'POST',
+            body: JSON.stringify(requestData)
+        });
+
+        const requestId = response.data.request.id;
+        
+        // Handle file uploads if any
+        const files = document.getElementById('documents')?.files;
+        if (files && files.length > 0) {
+            try {
+                await api.uploadFiles(`/requests/${requestId}/files`, Array.from(files));
+                showSuccessMessage(`Request submitted successfully with ${files.length} file(s)! Your request ID is: ${requestId.substring(0, 8)}...`);
+            } catch (uploadError) {
+                showSuccessMessage(`Request submitted successfully! Your request ID is: ${requestId.substring(0, 8)}...`);
+                showErrorMessage(`Note: Files could not be uploaded: ${uploadError.message}`);
+            }
+        } else {
+            showSuccessMessage(`Request submitted successfully! Your request ID is: ${requestId.substring(0, 8)}...`);
+        }
+        
+        // Refresh requests if on admin page
+        if (window.location.pathname.includes('admin.html')) {
+            loadAdminDashboard();
+        }
+    } catch (error) {
+        showErrorMessage(error.message || 'Failed to submit request');
+    }
 }
 
 function handleComplaintSubmission(formData) {
@@ -309,25 +476,32 @@ function handleContactSubmission(formData) {
     showSuccessMessage('Thank you for your message! We will get back to you within 24 hours.');
 }
 
-function handleAdminLogin(formData) {
-    const username = formData.get('username');
+async function handleAdminLogin(formData) {
+    const email = formData.get('username'); // Using email as username
     const password = formData.get('password');
     const rememberMe = formData.get('rememberMe') === 'on';
     
-    // Mock authentication
-    if (username === 'admin' && password === 'admin123') {
-        currentUser = { username, role: 'admin' };
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        localStorage.setItem('rememberMe', rememberMe.toString());
+    try {
+        const response = await login(email, password);
         
-        showSuccessMessage('Login successful! Redirecting to admin dashboard...');
-        
-        setTimeout(() => {
-            showAdminDashboard();
-            loadAdminDashboard();
-        }, 1500);
-    } else {
-        showErrorMessage('Invalid username or password');
+        if (response.data.user.role === 'ADMIN' || response.data.user.role === 'EMPLOYEE') {
+            localStorage.setItem('rememberMe', rememberMe.toString());
+            
+            showSuccessMessage('Login successful! Redirecting to admin dashboard...');
+            
+            setTimeout(() => {
+                // Show admin dashboard
+                if (typeof showAdminDashboard === 'function') {
+                    showAdminDashboard();
+                }
+                loadAdminDashboard();
+            }, 1500);
+        } else {
+            showErrorMessage('Access denied. Admin privileges required.');
+            logout();
+        }
+    } catch (error) {
+        showErrorMessage(error.message || 'Login failed');
     }
 }
 
@@ -363,27 +537,27 @@ function handlePollSubmission(formData) {
 }
 
 // ===== REQUEST TRACKING =====
-function trackRequest() {
+async function trackRequest() {
     const requestId = document.getElementById('requestId')?.value;
     if (!requestId) {
         showErrorMessage('Please enter a request ID');
         return;
     }
     
-    const request = mockData.requests.find(req => req.id === requestId);
-    if (request) {
-        showRequestStatus(request);
-    } else {
-        showErrorMessage('Request not found. Please check your request ID.');
+    try {
+        const response = await api.request(`/requests/${requestId}`);
+        showRequestStatus(response.data.request);
+    } catch (error) {
+        showErrorMessage(error.message || 'Request not found. Please check your request ID.');
     }
 }
 
 function showRequestStatus(request) {
     const statusColors = {
-        'Pending': '#ffc107',
-        'Approved': '#28a745',
-        'Completed': '#007bff',
-        'Rejected': '#dc3545'
+        'PENDING': '#ffc107',
+        'APPROVED': '#28a745',
+        'COMPLETED': '#007bff',
+        'REJECTED': '#dc3545'
     };
     
     const statusHtml = `
@@ -393,8 +567,9 @@ function showRequestStatus(request) {
                 <p><strong>Request ID:</strong> ${request.id}</p>
                 <p><strong>Type:</strong> ${request.type}</p>
                 <p><strong>Status:</strong> <span style="color: ${statusColors[request.status]}">${request.status}</span></p>
-                <p><strong>Date Submitted:</strong> ${request.date}</p>
-                <p><strong>Citizen:</strong> ${request.citizen}</p>
+                <p><strong>Date Submitted:</strong> ${new Date(request.createdAt).toLocaleDateString()}</p>
+                <p><strong>Citizen:</strong> ${request.user.fullName}</p>
+                <p><strong>Description:</strong> ${request.description}</p>
             </div>
         </div>
     `;
@@ -639,7 +814,7 @@ function toggleTheme() {
 }
 
 // ===== ADMIN DASHBOARD FUNCTIONS =====
-function loadAdminDashboard() {
+async function loadAdminDashboard() {
     if (!currentUser) {
         currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
@@ -649,94 +824,84 @@ function loadAdminDashboard() {
         return;
     }
     
-    loadRequestsTable();
-    loadComplaintsTable();
-    loadPollsTable();
-    loadNewsTable();
+    try {
+        await Promise.all([
+            loadRequestsTable(),
+            loadRequestStats()
+        ]);
+    } catch (error) {
+        console.error('Error loading admin dashboard:', error);
+        showErrorMessage('Failed to load dashboard data');
+    }
 }
 
-function loadRequestsTable() {
+async function loadRequestsTable() {
     const tbody = document.getElementById('requests-table-body');
     if (!tbody) return;
     
-    tbody.innerHTML = mockData.requests.map(request => `
-        <tr>
-            <td>${request.id}</td>
-            <td>${request.type}</td>
-            <td>${request.citizen}</td>
-            <td>${request.date}</td>
-            <td><span class="status-badge status-${request.status.toLowerCase()}">${request.status}</span></td>
-            <td>
-                <button onclick="updateRequestStatus('${request.id}')" class="btn btn-sm btn-primary">Update</button>
-            </td>
-        </tr>
-    `).join('');
+    try {
+        const response = await api.request('/requests?limit=50');
+        const requests = response.data.requests;
+        
+        tbody.innerHTML = requests.map(request => `
+            <tr>
+                <td>${request.id.substring(0, 8)}...</td>
+                <td>${request.type}</td>
+                <td>${request.user.fullName}</td>
+                <td>${new Date(request.createdAt).toLocaleDateString()}</td>
+                <td><span class="status-badge status-${request.status.toLowerCase()}">${request.status}</span></td>
+                <td>
+                    <button onclick="updateRequestStatus('${request.id}')" class="btn btn-sm btn-primary">Update</button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        console.error('Error loading requests:', error);
+        tbody.innerHTML = '<tr><td colspan="6">Error loading requests</td></tr>';
+    }
 }
 
-function loadComplaintsTable() {
-    const tbody = document.getElementById('complaints-table-body');
-    if (!tbody) return;
-    
-    tbody.innerHTML = mockData.complaints.map(complaint => `
-        <tr>
-            <td>${complaint.id}</td>
-            <td>${complaint.type}</td>
-            <td>${complaint.citizen}</td>
-            <td>${complaint.date}</td>
-            <td><span class="status-badge status-${complaint.status.toLowerCase().replace(' ', '-')}">${complaint.status}</span></td>
-            <td>
-                <button onclick="viewComplaint('${complaint.id}')" class="btn btn-sm btn-secondary">View</button>
-            </td>
-        </tr>
-    `).join('');
+async function loadRequestStats() {
+    try {
+        const response = await api.request('/requests/stats');
+        const stats = response.data;
+        
+        // Update stat cards
+        const totalRequestsEl = document.getElementById('total-requests');
+        const totalComplaintsEl = document.getElementById('total-complaints');
+        const totalPollsEl = document.getElementById('total-polls');
+        const totalNewsEl = document.getElementById('total-news');
+        
+        if (totalRequestsEl) totalRequestsEl.textContent = stats.totalRequests;
+        if (totalComplaintsEl) totalComplaintsEl.textContent = stats.statusBreakdown.pending;
+        if (totalPollsEl) totalPollsEl.textContent = '0'; // Not implemented yet
+        if (totalNewsEl) totalNewsEl.textContent = '0'; // Not implemented yet
+    } catch (error) {
+        console.error('Error loading stats:', error);
+    }
 }
 
-function loadPollsTable() {
-    const tbody = document.getElementById('polls-table-body');
-    if (!tbody) return;
-    
-    tbody.innerHTML = mockData.polls.map(poll => `
-        <tr>
-            <td>${poll.id}</td>
-            <td>${poll.question}</td>
-            <td>${poll.totalVotes}</td>
-            <td><span class="status-badge status-${poll.active ? 'active' : 'inactive'}">${poll.active ? 'Active' : 'Inactive'}</span></td>
-            <td>
-                <button onclick="togglePoll('${poll.id}')" class="btn btn-sm btn-primary">${poll.active ? 'Deactivate' : 'Activate'}</button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-function loadNewsTable() {
-    const container = document.getElementById('news-list');
-    if (!container) return;
-    
-    container.innerHTML = mockData.news.map(news => `
-        <div class="news-item">
-            <h4>${news.title}</h4>
-            <p>${news.content}</p>
-            <div class="news-meta">
-                <span>By ${news.author}</span>
-                <span>${news.date}</span>
-            </div>
-        </div>
-    `).join('');
-}
-
-function updateRequestStatus(requestId) {
-    const request = mockData.requests.find(req => req.id === requestId);
-    if (!request) return;
-    
-    const statuses = ['Pending', 'Approved', 'Completed', 'Rejected'];
-    const currentIndex = statuses.indexOf(request.status);
-    const nextIndex = (currentIndex + 1) % statuses.length;
-    
-    request.status = statuses[nextIndex];
-    saveMockData();
-    loadRequestsTable();
-    
-    showSuccessMessage(`Request ${requestId} status updated to ${request.status}`);
+async function updateRequestStatus(requestId) {
+    try {
+        // Get current request to determine next status
+        const currentRequest = await api.request(`/requests/${requestId}`);
+        const currentStatus = currentRequest.data.request.status;
+        
+        const statusOrder = ['PENDING', 'APPROVED', 'COMPLETED', 'REJECTED'];
+        const currentIndex = statusOrder.indexOf(currentStatus);
+        const nextIndex = (currentIndex + 1) % statusOrder.length;
+        const nextStatus = statusOrder[nextIndex];
+        
+        await api.request(`/requests/${requestId}/status`, {
+            method: 'PUT',
+            body: JSON.stringify({ status: nextStatus })
+        });
+        
+        showSuccessMessage(`Request ${requestId.substring(0, 8)}... status updated to ${nextStatus}`);
+        loadRequestsTable();
+    } catch (error) {
+        showErrorMessage(error.message || 'Failed to update request status');
+    }
 }
 
 function viewComplaint(complaintId) {
@@ -965,8 +1130,53 @@ function initializePage() {
             initializeDashboardCharts();
             break;
         case 'citizen.html':
-            loadPollsForVoting();
+            initializeCitizenPortal();
             break;
+    }
+}
+
+function initializeCitizenPortal() {
+    // Check if user is already logged in
+    if (currentUser && currentUser.role === 'CITIZEN') {
+        // Hide auth section, show services
+        const authSection = document.getElementById('auth');
+        const requestsSection = document.getElementById('requests');
+        
+        if (authSection) authSection.style.display = 'none';
+        if (requestsSection) requestsSection.style.display = 'block';
+        
+        // Show all navigation items
+        const navItems = document.querySelectorAll('.service-nav-item');
+        navItems.forEach(item => item.style.display = 'block');
+        
+        // Add logout button
+        addLogoutButton();
+    } else {
+        // Show auth section, hide services
+        const authSection = document.getElementById('auth');
+        const requestsSection = document.getElementById('requests');
+        
+        if (authSection) authSection.style.display = 'block';
+        if (requestsSection) requestsSection.style.display = 'none';
+        
+        // Hide navigation items
+        const navItems = document.querySelectorAll('.service-nav-item');
+        navItems.forEach(item => item.style.display = 'none');
+    }
+}
+
+function addLogoutButton() {
+    const navActions = document.querySelector('.nav-actions');
+    if (navActions && !document.getElementById('logout-btn')) {
+        const logoutBtn = document.createElement('button');
+        logoutBtn.id = 'logout-btn';
+        logoutBtn.className = 'btn btn-secondary btn-sm';
+        logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+        logoutBtn.onclick = () => {
+            logout();
+            window.location.reload();
+        };
+        navActions.appendChild(logoutBtn);
     }
 }
 

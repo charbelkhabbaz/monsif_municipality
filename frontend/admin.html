@@ -49,9 +49,9 @@
                     
                     <form id="admin-login-form" data-form-type="admin-login">
                         <div class="form-group">
-                            <label for="username" class="form-label">Username *</label>
-                            <input type="text" id="username" name="username" class="form-input" 
-                                placeholder="Enter your username" required>
+                            <label for="username" class="form-label">Email *</label>
+                            <input type="email" id="username" name="username" class="form-input" 
+                                placeholder="Enter your email" required>
                         </div>
                         
                         <div class="form-group">
@@ -76,8 +76,8 @@
                     
                     <div class="login-footer">
                         <p>Demo Credentials:</p>
-                        <p><strong>Username:</strong> admin</p>
-                        <p><strong>Password:</strong> admin123</p>
+                        <p><strong>Admin:</strong> admin@monsif.gov.lb / admin123</p>
+                        <p><strong>Employee:</strong> employee@monsif.gov.lb / employee123</p>
                     </div>
                 </div>
             </div>
@@ -789,24 +789,7 @@
     
     <!-- Page-specific JavaScript -->
     <script>
-        // Check if user is logged in
-        document.addEventListener('DOMContentLoaded', function() {
-            // Always start with login section
-            showLoginSection();
-            
-            // Only auto-login if user explicitly wants to stay logged in
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const rememberMe = localStorage.getItem('rememberMe') === 'true';
-            
-            if (currentUser && rememberMe) {
-                // Show a brief login animation then proceed to dashboard
-                setTimeout(() => {
-                    showAdminDashboard();
-                    loadAdminDashboard();
-                }, 1000);
-            }
-        });
-        
+        // Admin page specific functions
         function showLoginSection() {
             document.getElementById('login-section').classList.remove('hidden');
             document.getElementById('admin-dashboard').classList.add('hidden');
@@ -818,12 +801,51 @@
         }
         
         function logout() {
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('rememberMe');
-            currentUser = null;
+            // Use the logout function from main.js
+            if (typeof logout === 'function') {
+                logout();
+            } else {
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('rememberMe');
+            }
             showLoginSection();
             showSuccessMessage('Logged out successfully');
         }
+        
+        // Override the admin dashboard loading to include stats update
+        function updateDashboardStats() {
+            const totalRequestsEl = document.getElementById('total-requests');
+            const totalComplaintsEl = document.getElementById('total-complaints');
+            const totalPollsEl = document.getElementById('total-polls');
+            const totalNewsEl = document.getElementById('total-news');
+            
+            if (totalRequestsEl) totalRequestsEl.textContent = '0';
+            if (totalComplaintsEl) totalComplaintsEl.textContent = '0';
+            if (totalPollsEl) totalPollsEl.textContent = '0';
+            if (totalNewsEl) totalNewsEl.textContent = '0';
+        }
+        
+        // Initialize admin page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Always start with login section
+            showLoginSection();
+            
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('currentUser');
+            const savedToken = localStorage.getItem('authToken');
+            const rememberMe = localStorage.getItem('rememberMe') === 'true';
+            
+            if (savedUser && savedToken && rememberMe) {
+                // Show a brief login animation then proceed to dashboard
+                setTimeout(() => {
+                    showAdminDashboard();
+                    if (typeof loadAdminDashboard === 'function') {
+                        loadAdminDashboard();
+                    }
+                }, 1000);
+            }
+        });
         
         function showAddRequestForm() {
             document.getElementById('add-request-modal').classList.add('active');

@@ -81,8 +81,67 @@
         </div>
     </section>
 
+    <!-- Login/Register Section -->
+    <section class="section" id="auth">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Citizen Access</h2>
+                <p class="section-subtitle">
+                    Login or register to access municipal services
+                </p>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card fade-in">
+                    <h3>Login</h3>
+                    <form id="citizen-login-form">
+                        <div class="form-group">
+                            <label for="loginEmail" class="form-label">Email *</label>
+                            <input type="email" id="loginEmail" name="email" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="loginPassword" class="form-label">Password *</label>
+                            <input type="password" id="loginPassword" name="password" class="form-input" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="card fade-in">
+                    <h3>Register</h3>
+                    <form id="citizen-register-form">
+                        <div class="form-group">
+                            <label for="regFullName" class="form-label">Full Name *</label>
+                            <input type="text" id="regFullName" name="fullName" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regEmail" class="form-label">Email *</label>
+                            <input type="email" id="regEmail" name="email" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regPassword" class="form-label">Password *</label>
+                            <input type="password" id="regPassword" name="password" class="form-input" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-secondary btn-full">
+                            <i class="fas fa-user-plus"></i>
+                            Register
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Request Form Section -->
-    <section class="section" id="requests">
+    <section class="section" id="requests" style="display: none;">
         <div class="container">
             <div class="section-header fade-in">
                 <h2 class="section-title">Submit a Request</h2>
