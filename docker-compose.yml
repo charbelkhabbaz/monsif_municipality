@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: emun
+      MYSQL_USER: emun
+      MYSQL_PASSWORD: alijad123
+    ports:
+      - 3306:3306
+    volumes:
+      - ./backend/schema.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - emun-network
+  backend:
+    build:
+      context: ./backend
+      dockerfile: .dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      - MYSQLHOST=db
+      - MYSQLUSER=emun
+      - MYSQLPASSWORD=alijad123
+      - MYSQLDATABASE=emun
+      - MYSQLPORT=3306
+    depends_on:
+      - db
+    networks:
+      - emun-network
+
+networks:
+  emun-network:
+    
