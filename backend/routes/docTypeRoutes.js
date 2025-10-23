@@ -24,27 +24,6 @@ const {
  *     responses:
  *       200:
  *         description: List of all document types
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/DocType'
- *                 count:
- *                   type: integer
- *                   example: 3
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.get('/', getAllDocTypes);
 
@@ -65,28 +44,8 @@ router.get('/', getAllDocTypes);
  *     responses:
  *       200:
  *         description: Document type details
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   $ref: '#/components/schemas/DocType'
  *       404:
  *         description: Document type not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.get('/:id', getDocTypeById);
 
@@ -116,37 +75,8 @@ router.get('/:id', getDocTypeById);
  *     responses:
  *       201:
  *         description: Document type created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Document type created successfully
- *                 data:
- *                   $ref: '#/components/schemas/DocType'
  *       400:
  *         description: Bad request - missing required fields
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       409:
- *         description: Conflict - document type name already exists
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.post('/', createDocType);
 
@@ -182,37 +112,10 @@ router.post('/', createDocType);
  *     responses:
  *       200:
  *         description: Document type updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Document type updated successfully
- *                 data:
- *                   $ref: '#/components/schemas/DocType'
+ *       400:
+ *         description: Bad request - no fields to update
  *       404:
  *         description: Document type not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       409:
- *         description: Conflict - document type name already exists
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.put('/:id', updateDocType);
 
@@ -233,35 +136,10 @@ router.put('/:id', updateDocType);
  *     responses:
  *       200:
  *         description: Document type deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Document type deleted successfully
  *       400:
  *         description: Bad request - document type has existing documents
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  *       404:
  *         description: Document type not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.delete('/:id', deleteDocType);
 

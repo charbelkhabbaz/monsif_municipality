@@ -24,27 +24,6 @@ const {
  *     responses:
  *       200:
  *         description: List of all users
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/User'
- *                 count:
- *                   type: integer
- *                   example: 5
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.get('/', getAllUsers);
 
@@ -65,28 +44,8 @@ router.get('/', getAllUsers);
  *     responses:
  *       200:
  *         description: User details
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   $ref: '#/components/schemas/User'
  *       404:
  *         description: User not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.get('/:id', getUserById);
 
@@ -129,78 +88,10 @@ router.get('/:id', getUserById);
  *     responses:
  *       201:
  *         description: User created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: User created successfully
- *                 data:
- *                   type: object
- *                   properties:
- *                     user_id:
- *                       type: integer
- *                       example: 1
- *                     username:
- *                       type: string
- *                       example: ali_jadelaoun
- *                     email:
- *                       type: string
- *                       example: ali.jadelaoun@gmail.com
- *                     role:
- *                       type: string
- *                       example: citizen
- *                     created_at:
- *                       type: string
- *                       format: date-time
- *                       example: 2025-10-22T20:00:00.000Z
  *       400:
  *         description: Bad request - missing required fields
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Username, email, password_hash, and role are required
  *       409:
  *         description: Conflict - user already exists
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: User with this email or username already exists
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Error creating user
- *                 error:
- *                   type: string
- *                   example: Internal server error
  */
 router.post('/', createUser);
 
@@ -226,62 +117,33 @@ router.post('/', createUser);
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               username:
  *                 type: string
- *                 description: Full name of the user
- *                 example: John Updated
+ *                 description: Username for the user account
+ *                 example: john_updated
  *               email:
  *                 type: string
  *                 format: email
  *                 description: Email address of the user
  *                 example: john.updated@example.com
- *               password:
+ *               password_hash:
  *                 type: string
- *                 description: Password for the user account
- *                 example: newpassword123
+ *                 description: Hashed password for the user account
+ *                 example: $2b$10$hashedpassword12345678901234567890
  *               role:
  *                 type: string
- *                 enum: [citizen, admin, employee]
+ *                 enum: [citizen, admin]
  *                 description: Role of the user in the system
  *                 example: citizen
- *               address:
- *                 type: string
- *                 description: Address of the user
- *                 example: 456 Oak Ave
  *     responses:
  *       200:
  *         description: User updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: User updated successfully
- *                 data:
- *                   $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request - no fields to update
  *       404:
  *         description: User not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  *       409:
- *         description: Conflict - email already exists
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
+ *         description: Conflict - email or username already exists
  */
 router.put('/:id', updateUser);
 
@@ -302,35 +164,10 @@ router.put('/:id', updateUser);
  *     responses:
  *       200:
  *         description: User deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: User deleted successfully
  *       400:
  *         description: Bad request - user has existing documents
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  *       404:
  *         description: User not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.delete('/:id', deleteUser);
 

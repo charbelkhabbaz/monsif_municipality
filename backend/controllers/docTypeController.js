@@ -3,7 +3,7 @@ const { query } = require('../db/connection');
 // Get all document types
 const getAllDocTypes = async (req, res) => {
   try {
-    const result = await query('SELECT doctype_id, name, description FROM document_types ORDER BY name ASC');
+    const result = await query('SELECT type_id, type_name, description FROM documenttype ORDER BY type_name ASC');
     res.status(200).json({
       success: true,
       data: result.rows,
@@ -23,7 +23,7 @@ const getAllDocTypes = async (req, res) => {
 const getDocTypeById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await query('SELECT doctype_id, name, description FROM document_types WHERE doctype_id = ?', [id]);
+    const result = await query('SELECT type_id, type_name, description FROM documenttype WHERE type_id = ?', [id]);
     
     if (result.rows.length === 0) {
       return res.status(404).json({
@@ -49,18 +49,18 @@ const getDocTypeById = async (req, res) => {
 // Create new document type
 const createDocType = async (req, res) => {
   try {
-    const { name, description } = req.body;
+    const { type_name, description } = req.body;
     
     // Validate required fields
-    if (!name) {
+    if (!type_name) {
       return res.status(400).json({
         success: false,
-        message: 'Name is required'
+        message: 'Type name is required'
       });
     }
     
     // Check if document type already exists
-    const existingDocType = await query('SELECT * FROM document_types WHERE name = ?', [name]);
+    const existingDocType = await query('SELECT * FROM documenttype WHERE type_name = ?', [type_name]);
     if (existingDocType.rows.length > 0) {
       return res.status(409).json({
         success: false,
@@ -68,18 +68,18 @@ const createDocType = async (req, res) => {
       });
     }
     
-    await query(
-      'INSERT INTO document_types (name, description, created_at) VALUES (?, ?, NOW())',
-      [name, description]
+    const result = await query(
+      'INSERT INTO documenttype (type_name, description) VALUES (?, ?)',
+      [type_name, description]
     );
     
     // Get the inserted document type
-    const result = await query('SELECT doctype_id, name, description FROM document_types WHERE name = ?', [name]);
+    const newDocType = await query('SELECT type_id, type_name, description FROM documenttype WHERE type_name = ?', [type_name]);
     
     res.status(201).json({
       success: true,
       message: 'Document type created successfully',
-      data: result.rows[0]
+      data: newDocType.rows[0]
     });
   } catch (error) {
     console.error('Error creating document type:', error);
@@ -95,10 +95,10 @@ const createDocType = async (req, res) => {
 const updateDocType = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description } = req.body;
+    const { type_name, description } = req.body;
     
     // Check if document type exists
-    const existingDocType = await query('SELECT * FROM document_types WHERE doctype_id = ?', [id]);
+    const existingDocType = await query('SELECT * FROM documenttype WHERE type_id = ?', [id]);
     if (existingDocType.rows.length === 0) {
       return res.status(404).json({
         success: false,
@@ -106,9 +106,9 @@ const updateDocType = async (req, res) => {
       });
     }
     
-    // Check if name is being changed and if it already exists
-    if (name && name !== existingDocType.rows[0].name) {
-      const nameCheck = await query('SELECT * FROM document_types WHERE name = ? AND doctype_id != ?', [name, id]);
+    // Check if type_name is being changed and if it already exists
+    if (type_name && type_name !== existingDocType.rows[0].type_name) {
+      const nameCheck = await query('SELECT * FROM documenttype WHERE type_name = ? AND type_id != ?', [type_name, id]);
       if (nameCheck.rows.length > 0) {
         return res.status(409).json({
           success: false,
@@ -118,12 +118,12 @@ const updateDocType = async (req, res) => {
     }
     
     await query(
-      'UPDATE document_types SET name = COALESCE(?, name), description = COALESCE(?, description) WHERE doctype_id = ?',
-      [name, description, id]
+      'UPDATE documenttype SET type_name = COALESCE(?, type_name), description = COALESCE(?, description) WHERE type_id = ?',
+      [type_name, description, id]
     );
     
     // Get the updated document type
-    const result = await query('SELECT doctype_id, name, description FROM document_types WHERE doctype_id = ?', [id]);
+    const result = await query('SELECT type_id, type_name, description FROM documenttype WHERE type_id = ?', [id]);
     
     res.status(200).json({
       success: true,
@@ -146,7 +146,7 @@ const deleteDocType = async (req, res) => {
     const { id } = req.params;
     
     // Check if document type exists
-    const existingDocType = await query('SELECT * FROM document_types WHERE doctype_id = ?', [id]);
+    const existingDocType = await query('SELECT * FROM documenttype WHERE type_id = ?', [id]);
     if (existingDocType.rows.length === 0) {
       return res.status(404).json({
         success: false,
@@ -155,7 +155,7 @@ const deleteDocType = async (req, res) => {
     }
     
     // Check if document type has documents
-    const docTypeDocuments = await query('SELECT * FROM documents WHERE doctype_id = ?', [id]);
+    const docTypeDocuments = await query('SELECT * FROM document WHERE type_id = ?', [id]);
     if (docTypeDocuments.rows.length > 0) {
       return res.status(400).json({
         success: false,
@@ -163,7 +163,7 @@ const deleteDocType = async (req, res) => {
       });
     }
     
-    await query('DELETE FROM document_types WHERE doctype_id = ?', [id]);
+    await query('DELETE FROM documenttype WHERE type_id = ?', [id]);
     
     res.status(200).json({
       success: true,

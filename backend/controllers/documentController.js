@@ -7,18 +7,18 @@ const getAllDocuments = async (req, res) => {
       SELECT 
         d.document_id,
         d.user_id,
-        d.doctype_id,
+        d.type_id,
         d.status,
         d.request_date,
         d.issue_date,
         d.notes,
         u.username as user_name,
         u.email as user_email,
-        dt.name as doctype_name,
-        dt.description as doctype_description
-      FROM documents d
-      JOIN users u ON d.user_id = u.user_id
-      JOIN document_types dt ON d.doctype_id = dt.doctype_id
+        dt.type_name,
+        dt.description
+      FROM document d
+      JOIN \`User\` u ON d.user_id = u.user_id
+      JOIN documenttype dt ON d.type_id = dt.type_id
       ORDER BY d.request_date DESC
     `);
     
@@ -45,18 +45,18 @@ const getDocumentById = async (req, res) => {
       SELECT 
         d.document_id,
         d.user_id,
-        d.doctype_id,
+        d.type_id,
         d.status,
         d.request_date,
         d.issue_date,
         d.notes,
         u.username as user_name,
         u.email as user_email,
-        dt.name as doctype_name,
-        dt.description as doctype_description
-      FROM documents d
-      JOIN users u ON d.user_id = u.user_id
-      JOIN document_types dt ON d.doctype_id = dt.doctype_id
+        dt.type_name,
+        dt.description
+      FROM document d
+      JOIN \`User\` u ON d.user_id = u.user_id
+      JOIN documenttype dt ON d.type_id = dt.type_id
       WHERE d.document_id = ?
     `, [id]);
     
@@ -89,18 +89,18 @@ const getDocumentsByUserId = async (req, res) => {
       SELECT 
         d.document_id,
         d.user_id,
-        d.doctype_id,
+        d.type_id,
         d.status,
         d.request_date,
         d.issue_date,
         d.notes,
         u.username as user_name,
         u.email as user_email,
-        dt.name as doctype_name,
-        dt.description as doctype_description
-      FROM documents d
-      JOIN users u ON d.user_id = u.user_id
-      JOIN document_types dt ON d.doctype_id = dt.doctype_id
+        dt.type_name,
+        dt.description
+      FROM document d
+      JOIN \`User\` u ON d.user_id = u.user_id
+      JOIN documenttype dt ON d.type_id = dt.type_id
       WHERE d.user_id = ?
       ORDER BY d.request_date DESC
     `, [userId]);
@@ -134,7 +134,7 @@ const createDocument = async (req, res) => {
     }
     
     // Check if user exists
-    const userCheck = await query('SELECT * FROM users WHERE user_id = ?', [user_id]);
+    const userCheck = await query('SELECT * FROM \`User\` WHERE user_id = ?', [user_id]);
     if (userCheck.rows.length === 0) {
       return res.status(404).json({
         success: false,
@@ -143,7 +143,7 @@ const createDocument = async (req, res) => {
     }
     
     // Check if document type exists
-    const docTypeCheck = await query('SELECT * FROM documenttypes WHERE type_id = ?', [type_id]);
+    const docTypeCheck = await query('SELECT * FROM documenttype WHERE type_id = ?', [type_id]);
     if (docTypeCheck.rows.length === 0) {
       return res.status(404).json({
         success: false,
@@ -152,14 +152,34 @@ const createDocument = async (req, res) => {
     }
     
     const result = await query(
-      'INSERT INTO documents (user_id, type_id, status, request_date, notes) VALUES (?, ?, ?, NOW(), $4) RETURNING document_id, user_id, type_id, status, request_date, issue_date, notes',
-      [user_id, type_id, 'pending', notes]
+      'INSERT INTO document (user_id, type_id, status, request_date, notes) VALUES (?, ?, "pending", NOW(), ?)',
+      [user_id, type_id, notes]
     );
+    
+    // Get the created document with joins
+    const newDocument = await query(`
+      SELECT 
+        d.document_id,
+        d.user_id,
+        d.type_id,
+        d.status,
+        d.request_date,
+        d.issue_date,
+        d.notes,
+        u.username as user_name,
+        u.email as user_email,
+        dt.type_name,
+        dt.description
+      FROM document d
+      JOIN \`User\` u ON d.user_id = u.user_id
+      JOIN documenttype dt ON d.type_id = dt.type_id
+      WHERE d.document_id = ?
+    `, [result.insertId]);
     
     res.status(201).json({
       success: true,
       message: 'Document created successfully',
-      data: result.rows[0]
+      data: newDocument.rows[0]
     });
   } catch (error) {
     console.error('Error creating document:', error);
@@ -178,7 +198,7 @@ const updateDocument = async (req, res) => {
     const { user_id, type_id, status, issue_date, notes } = req.body;
     
     // Check if document exists
-    const existingDocument = await query('SELECT * FROM documents WHERE document_id = ?', [id]);
+    const existingDocument = await query('SELECT * FROM document WHERE document_id = ?', [id]);
     if (existingDocument.rows.length === 0) {
       return res.status(404).json({
         success: false,
@@ -188,7 +208,7 @@ const updateDocument = async (req, res) => {
     
     // Validate user_id if provided
     if (user_id) {
-      const userCheck = await query('SELECT * FROM users WHERE user_id = ?', [user_id]);
+      const userCheck = await query('SELECT * FROM \`User\` WHERE user_id = ?', [user_id]);
       if (userCheck.rows.length === 0) {
         return res.status(404).json({
           success: false,
@@ -199,7 +219,7 @@ const updateDocument = async (req, res) => {
     
     // Validate type_id if provided
     if (type_id) {
-      const docTypeCheck = await query('SELECT * FROM documenttypes WHERE type_id = ?', [type_id]);
+      const docTypeCheck = await query('SELECT * FROM documenttype WHERE type_id = ?', [type_id]);
       if (docTypeCheck.rows.length === 0) {
         return res.status(404).json({
           success: false,
@@ -217,15 +237,35 @@ const updateDocument = async (req, res) => {
       });
     }
     
-    const result = await query(
-      'UPDATE documents SET user_id = COALESCE(?, user_id), type_id = COALESCE(?, type_id), status = COALESCE(?, status), issue_date = COALESCE($4, issue_date), notes = COALESCE($5, notes) WHERE document_id = $6 RETURNING document_id, user_id, type_id, status, request_date, issue_date, notes',
+    await query(
+      'UPDATE document SET user_id = COALESCE(?, user_id), type_id = COALESCE(?, type_id), status = COALESCE(?, status), issue_date = COALESCE(?, issue_date), notes = COALESCE(?, notes) WHERE document_id = ?',
       [user_id, type_id, status, issue_date, notes, id]
     );
+    
+    // Get the updated document with joins
+    const updatedDocument = await query(`
+      SELECT 
+        d.document_id,
+        d.user_id,
+        d.type_id,
+        d.status,
+        d.request_date,
+        d.issue_date,
+        d.notes,
+        u.username as user_name,
+        u.email as user_email,
+        dt.type_name,
+        dt.description
+      FROM document d
+      JOIN \`User\` u ON d.user_id = u.user_id
+      JOIN documenttype dt ON d.type_id = dt.type_id
+      WHERE d.document_id = ?
+    `, [id]);
     
     res.status(200).json({
       success: true,
       message: 'Document updated successfully',
-      data: result.rows[0]
+      data: updatedDocument.rows[0]
     });
   } catch (error) {
     console.error('Error updating document:', error);
@@ -243,7 +283,7 @@ const deleteDocument = async (req, res) => {
     const { id } = req.params;
     
     // Check if document exists
-    const existingDocument = await query('SELECT * FROM documents WHERE document_id = ?', [id]);
+    const existingDocument = await query('SELECT * FROM document WHERE document_id = ?', [id]);
     if (existingDocument.rows.length === 0) {
       return res.status(404).json({
         success: false,
@@ -251,7 +291,7 @@ const deleteDocument = async (req, res) => {
       });
     }
     
-    await query('DELETE FROM documents WHERE document_id = ?', [id]);
+    await query('DELETE FROM document WHERE document_id = ?', [id]);
     
     res.status(200).json({
       success: true,

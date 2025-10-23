@@ -3,12 +3,12 @@ const { query } = require('../db/connection');
 // Get all users
 const getAllUsers = async (req, res) => {
   try {
-      const result = await query('SELECT user_id, username, email, role, created_at FROM `User` ORDER BY created_at DESC');
-      res.status(200).json({
-        success: true,
-        data: result.rows,
-        count: result.rowCount
-      });
+    const result = await query('SELECT user_id, username, email, role, created_at FROM `User` ORDER BY created_at DESC');
+    res.status(200).json({
+      success: true,
+      data: result.rows,
+      count: result.rowCount
+    });
   } catch (error) {
     console.error('Error fetching users:', error);
     res.status(500).json({
@@ -23,7 +23,7 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await query('SELECT user_id, username, email, role, created_at FROM `User` WHERE user_id = $1', [id]);
+    const result = await query('SELECT user_id, username, email, role, created_at FROM `User` WHERE user_id = ?', [id]);
     
     if (result.rows.length === 0) {
       return res.status(404).json({
@@ -49,8 +49,8 @@ const getUserById = async (req, res) => {
 // Create new user
 const createUser = async (req, res) => {
   try {
-    const {  username, password_hash, email, role } = req.body;
-        //user_id, username, password_hash, email, role, created_at
+    const { username, password_hash, email, role } = req.body;
+
     // Validate required fields
     if (!username || !password_hash || !email || !role) {
       return res.status(400).json({
@@ -60,7 +60,11 @@ const createUser = async (req, res) => {
     }
     
     // Check if user already exists
-    const existingUser = await query('SELECT * FROM `User` WHERE email = ? OR username = ?', [email, username]);
+    const existingUser = await query(
+      'SELECT * FROM `User` WHERE email = ? OR username = ?', 
+      [email, username]
+    );
+    
     if (existingUser.rows.length > 0) {
       return res.status(409).json({
         success: false,
@@ -68,13 +72,17 @@ const createUser = async (req, res) => {
       });
     }
     
-    await query(
+    // Insert new user
+    const insertResult = await query(
       'INSERT INTO `User` (username, password_hash, email, role, created_at) VALUES (?, ?, ?, ?, NOW())',
       [username, password_hash, email, role]
     );
     
     // Get the inserted user
-    const newUser = await query('SELECT user_id, username, email, role, created_at FROM `User` WHERE username = ? AND email = ?', [username, email]);
+    const newUser = await query(
+      'SELECT user_id, username, email, role, created_at FROM `User` WHERE username = ? AND email = ?', 
+      [username, email]
+    );
     
     res.status(201).json({
       success: true,
@@ -106,9 +114,14 @@ const updateUser = async (req, res) => {
       });
     }
     
+    const currentUser = existingUser.rows[0];
+    
     // Check if email or username is being changed and if it already exists
-    if (email && email !== existingUser.rows[0].email) {
-      const emailCheck = await query('SELECT * FROM `User` WHERE email = ? AND user_id != ?', [email, id]);
+    if (email && email !== currentUser.email) {
+      const emailCheck = await query(
+        'SELECT * FROM `User` WHERE email = ? AND user_id != ?', 
+        [email, id]
+      );
       if (emailCheck.rows.length > 0) {
         return res.status(409).json({
           success: false,
@@ -117,8 +130,11 @@ const updateUser = async (req, res) => {
       }
     }
     
-    if (username && username !== existingUser.rows[0].username) {
-      const usernameCheck = await query('SELECT * FROM `User` WHERE username = ? AND user_id != ?', [username, id]);
+    if (username && username !== currentUser.username) {
+      const usernameCheck = await query(
+        'SELECT * FROM `User` WHERE username = ? AND user_id != ?', 
+        [username, id]
+      );
       if (usernameCheck.rows.length > 0) {
         return res.status(409).json({
           success: false,
@@ -127,18 +143,19 @@ const updateUser = async (req, res) => {
       }
     }
     
-    await query(
+    // Use COALESCE to only update provided fields
+    const result = await query(
       'UPDATE `User` SET username = COALESCE(?, username), email = COALESCE(?, email), password_hash = COALESCE(?, password_hash), role = COALESCE(?, role) WHERE user_id = ?',
       [username, email, password_hash, role, id]
     );
     
     // Get the updated user
-    const result = await query('SELECT user_id, username, email, role, created_at FROM `User` WHERE user_id = ?', [id]);
+    const updatedUser = await query('SELECT user_id, username, email, role, created_at FROM `User` WHERE user_id = ?', [id]);
     
     res.status(200).json({
       success: true,
       message: 'User updated successfully',
-      data: result.rows[0]
+      data: updatedUser.rows[0]
     });
   } catch (error) {
     console.error('Error updating user:', error);
@@ -165,7 +182,7 @@ const deleteUser = async (req, res) => {
     }
     
     // Check if user has documents
-    const userDocuments = await query('SELECT * FROM document WHERE user_id = $1', [id]);
+    const userDocuments = await query('SELECT * FROM document WHERE user_id = ?', [id]);
     if (userDocuments.rows.length > 0) {
       return res.status(400).json({
         success: false,
@@ -173,7 +190,7 @@ const deleteUser = async (req, res) => {
       });
     }
     
-    await query('DELETE FROM `User` WHERE user_id = $1', [id]);
+    await query('DELETE FROM `User` WHERE user_id = ?', [id]);
     
     res.status(200).json({
       success: true,

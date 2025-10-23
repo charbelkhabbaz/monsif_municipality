@@ -25,42 +25,6 @@ const {
  *     responses:
  *       200:
  *         description: List of all documents
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   type: array
- *                   items:
- *                     allOf:
- *                       - $ref: '#/components/schemas/Document'
- *                       - type: object
- *                         properties:
- *                           user_name:
- *                             type: string
- *                             example: John Doe
- *                           user_email:
- *                             type: string
- *                             example: john@example.com
- *                           doctype_name:
- *                             type: string
- *                             example: Birth Certificate
- *                           doctype_description:
- *                             type: string
- *                             example: Official birth certificate
- *                 count:
- *                   type: integer
- *                   example: 10
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.get('/', getAllDocuments);
 
@@ -81,42 +45,6 @@ router.get('/', getAllDocuments);
  *     responses:
  *       200:
  *         description: List of documents for the specified user
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   type: array
- *                   items:
- *                     allOf:
- *                       - $ref: '#/components/schemas/Document'
- *                       - type: object
- *                         properties:
- *                           user_name:
- *                             type: string
- *                             example: John Doe
- *                           user_email:
- *                             type: string
- *                             example: john@example.com
- *                           doctype_name:
- *                             type: string
- *                             example: Birth Certificate
- *                           doctype_description:
- *                             type: string
- *                             example: Official birth certificate
- *                 count:
- *                   type: integer
- *                   example: 3
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.get('/user/:userId', getDocumentsByUserId);
 
@@ -137,43 +65,8 @@ router.get('/user/:userId', getDocumentsByUserId);
  *     responses:
  *       200:
  *         description: Document details with user and doctype information
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   allOf:
- *                     - $ref: '#/components/schemas/Document'
- *                     - type: object
- *                       properties:
- *                         user_name:
- *                           type: string
- *                           example: John Doe
- *                         user_email:
- *                           type: string
- *                           example: john@example.com
- *                         doctype_name:
- *                           type: string
- *                           example: Birth Certificate
- *                         doctype_description:
- *                           type: string
- *                           example: Official birth certificate
  *       404:
  *         description: Document not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.get('/:id', getDocumentById);
 
@@ -208,37 +101,10 @@ router.get('/:id', getDocumentById);
  *     responses:
  *       201:
  *         description: Document request created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Document created successfully
- *                 data:
- *                   $ref: '#/components/schemas/Document'
  *       400:
  *         description: Bad request - missing required fields
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  *       404:
  *         description: User or document type not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.post('/', createDocument);
 
@@ -283,37 +149,10 @@ router.post('/', createDocument);
  *     responses:
  *       200:
  *         description: Document updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Document updated successfully
- *                 data:
- *                   $ref: '#/components/schemas/Document'
  *       400:
  *         description: Bad request - invalid status or missing references
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  *       404:
  *         description: Document, user, or document type not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.put('/:id', updateDocument);
 
@@ -334,29 +173,8 @@ router.put('/:id', updateDocument);
  *     responses:
  *       200:
  *         description: Document deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Document deleted successfully
  *       404:
  *         description: Document not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 router.delete('/:id', deleteDocument);
 
