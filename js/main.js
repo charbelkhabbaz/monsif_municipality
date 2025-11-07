@@ -6,7 +6,8 @@ let mockData = {
     requests: [],
     complaints: [],
     polls: [],
-    news: []
+    news: [],
+    users: [] // Citizen accounts
 };
 
 // ===== INITIALIZATION =====
@@ -71,6 +72,23 @@ function createDefaultMockData() {
         news: [
             { id: 'NEWS001', title: 'New Road Construction Project', content: 'Starting next month, we will begin construction on the new bypass road...', date: '2024-01-22', author: 'Mayor Office' },
             { id: 'NEWS002', title: 'Community Cleanup Day', content: 'Join us this Saturday for our monthly community cleanup initiative...', date: '2024-01-20', author: 'Environmental Committee' }
+        ],
+        users: [
+            // Sample approved user for testing
+            { 
+                id: 'USR001', 
+                username: 'testuser', 
+                password: 'password123', // In production, this should be hashed
+                fullName: 'Test User',
+                email: 'test@example.com',
+                phone: '+961-3-123456',
+                nationalId: '123456789',
+                address: 'Test Address',
+                status: 'approved', // 'pending', 'approved', 'rejected'
+                createdAt: '2024-01-01',
+                approvedAt: '2024-01-02',
+                approvedBy: 'admin'
+            }
         ]
     };
 }
@@ -258,6 +276,12 @@ function handleFormSubmission(form) {
             case 'admin-login':
                 handleAdminLogin(formData);
                 break;
+            case 'citizen-login':
+                handleCitizenLogin(formData);
+                break;
+            case 'signup':
+                handleSignup(formData);
+                break;
             case 'news':
                 handleNewsSubmission(formData);
                 break;
@@ -329,6 +353,109 @@ function handleAdminLogin(formData) {
     } else {
         showErrorMessage('Invalid username or password');
     }
+}
+
+function handleCitizenLogin(formData) {
+    const username = formData.get('username');
+    const password = formData.get('password');
+    const rememberMe = formData.get('rememberMe') === 'on';
+    
+    // Find user in mock data
+    const user = mockData.users.find(u => u.username === username);
+    
+    if (!user) {
+        showErrorMessage('Invalid username or password / اسم المستخدم أو كلمة المرور غير صحيحة');
+        return;
+    }
+    
+    if (user.password !== password) {
+        showErrorMessage('Invalid username or password / اسم المستخدم أو كلمة المرور غير صحيحة');
+        return;
+    }
+    
+    if (user.status !== 'approved') {
+        if (user.status === 'pending') {
+            showErrorMessage('Your account is pending approval. Please wait for administrator approval. / حسابك قيد الموافقة. يرجى انتظار موافقة المسؤول.');
+        } else if (user.status === 'rejected') {
+            showErrorMessage('Your account has been rejected. Please contact the administrator. / تم رفض حسابك. يرجى الاتصال بالمسؤول.');
+        }
+        return;
+    }
+    
+    // Login successful
+    currentUser = {
+        id: user.id,
+        username: user.username,
+        fullName: user.fullName,
+        email: user.email,
+        role: 'citizen'
+    };
+    
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    localStorage.setItem('rememberMe', rememberMe.toString());
+    
+    showSuccessMessage('Login successful! Redirecting to citizen portal... / تسجيل الدخول ناجح! جارٍ التوجيه إلى بوابة المواطن...');
+    
+    setTimeout(() => {
+        window.location.href = 'citizen.html';
+    }, 1500);
+}
+
+function handleSignup(formData) {
+    const username = formData.get('username');
+    const password = formData.get('password');
+    const confirmPassword = formData.get('confirmPassword');
+    const fullName = formData.get('fullName');
+    const email = formData.get('email');
+    const phone = formData.get('phone');
+    const nationalId = formData.get('nationalId');
+    const address = formData.get('address');
+    
+    // Validate password match
+    if (password !== confirmPassword) {
+        showErrorMessage('Passwords do not match / كلمات المرور غير متطابقة');
+        return;
+    }
+    
+    // Check if username already exists
+    const existingUser = mockData.users.find(u => u.username === username);
+    if (existingUser) {
+        showErrorMessage('Username already exists. Please choose another. / اسم المستخدم موجود بالفعل. يرجى اختيار آخر.');
+        return;
+    }
+    
+    // Check if email already exists
+    const existingEmail = mockData.users.find(u => u.email === email);
+    if (existingEmail) {
+        showErrorMessage('Email already registered. Please use a different email. / البريد الإلكتروني مسجل بالفعل. يرجى استخدام بريد إلكتروني آخر.');
+        return;
+    }
+    
+    // Create new user with pending status
+    const newUser = {
+        id: 'USR' + String(mockData.users.length + 1).padStart(3, '0'),
+        username: username,
+        password: password, // In production, this should be hashed
+        fullName: fullName,
+        email: email,
+        phone: phone,
+        nationalId: nationalId,
+        address: address,
+        status: 'pending', // Will need admin approval
+        createdAt: new Date().toISOString().split('T')[0],
+        approvedAt: null,
+        approvedBy: null
+    };
+    
+    mockData.users.push(newUser);
+    saveMockData();
+    
+    showSuccessMessage('Account created successfully! Your account is pending approval. You will be notified once approved. / تم إنشاء الحساب بنجاح! حسابك قيد الموافقة. سيتم إشعارك عند الموافقة.');
+    
+    // Redirect to login page after 2 seconds
+    setTimeout(() => {
+        window.location.href = 'login.html';
+    }, 2000);
 }
 
 function handleNewsSubmission(formData) {
@@ -661,24 +788,62 @@ function loadAdminDashboard() {
     loadComplaintsTable();
     loadPollsTable();
     loadNewsTable();
+    loadUsersTable();
 }
 
 function loadRequestsTable() {
     const tbody = document.getElementById('requests-table-body');
     if (!tbody) return;
     
-    tbody.innerHTML = mockData.requests.map(request => `
-        <tr>
-            <td>${request.id}</td>
-            <td>${request.type}</td>
-            <td>${request.citizen}</td>
-            <td>${request.date}</td>
-            <td><span class="status-badge status-${request.status.toLowerCase()}">${request.status}</span></td>
-            <td>
-                <button onclick="updateRequestStatus('${request.id}')" class="btn btn-sm btn-primary">Update</button>
-            </td>
-        </tr>
-    `).join('');
+    let requests = mockData.requests || [];
+    
+    // Apply filter if set
+    if (typeof currentRequestFilter !== 'undefined' && currentRequestFilter !== 'all') {
+        const filterStatus = currentRequestFilter.charAt(0).toUpperCase() + currentRequestFilter.slice(1);
+        requests = requests.filter(r => r.status === filterStatus);
+    }
+    
+    if (requests.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 2rem;">No requests found</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = requests.map(request => {
+        const statusColors = {
+            'Pending': '#ffc107',
+            'Completed': '#28a745',
+            'Rejected': '#dc3545',
+            'Approved': '#17a2b8'
+        };
+        
+        const paymentStatus = request.paymentStatus || 'N/A';
+        const amount = request.amount ? request.amount.toLocaleString() + ' LBP' : 'N/A';
+        const email = request.email || 'N/A';
+        const phone = request.phone || 'N/A';
+        
+        return `
+            <tr>
+                <td>${request.id}</td>
+                <td>${request.type}</td>
+                <td>${request.citizen}</td>
+                <td>${email}</td>
+                <td>${phone}</td>
+                <td>${request.date}</td>
+                <td>${amount}</td>
+                <td><span class="status-badge" style="background-color: ${paymentStatus === 'Paid' ? '#28a745' : '#ffc107'}">${paymentStatus}</span></td>
+                <td><span class="status-badge" style="background-color: ${statusColors[request.status] || '#6c757d'}">${request.status}</span></td>
+                <td>
+                    <div class="action-buttons">
+                        <select onchange="updateRequestStatus('${request.id}', this.value)" class="form-select form-select-sm" style="min-width: 120px;">
+                            <option value="Pending" ${request.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="Completed" ${request.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                            <option value="Rejected" ${request.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
 }
 
 function loadComplaintsTable() {
@@ -732,19 +897,155 @@ function loadNewsTable() {
     `).join('');
 }
 
-function updateRequestStatus(requestId) {
+function loadUsersTable() {
+    const tbody = document.getElementById('users-table-body');
+    if (!tbody) return;
+    
+    let users = mockData.users || [];
+    
+    // Apply filter if set
+    if (typeof currentCitizenFilter !== 'undefined' && currentCitizenFilter !== 'all') {
+        users = users.filter(u => u.status === currentCitizenFilter);
+    }
+    
+    if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 2rem;">No citizens found</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = users.map(user => {
+        const statusColors = {
+            'pending': '#ffc107',
+            'approved': '#28a745',
+            'rejected': '#dc3545'
+        };
+        
+        const statusLabels = {
+            'pending': 'Pending',
+            'approved': 'Approved',
+            'rejected': 'Rejected'
+        };
+        
+        return `
+            <tr>
+                <td>${user.id}</td>
+                <td>${user.fullName}</td>
+                <td>${user.username}</td>
+                <td>${user.email}</td>
+                <td>${user.phone}</td>
+                <td>${user.nationalId}</td>
+                <td>${user.address || 'N/A'}</td>
+                <td><span class="status-badge" style="background-color: ${statusColors[user.status]}">${statusLabels[user.status]}</span></td>
+                <td>${user.createdAt}</td>
+                <td>
+                    ${user.status === 'pending' ? `
+                        <button onclick="approveUser('${user.id}')" class="btn btn-sm btn-success" title="Approve">
+                            <i class="fas fa-check"></i> Approve
+                        </button>
+                        <button onclick="rejectUser('${user.id}')" class="btn btn-sm btn-danger" title="Reject">
+                            <i class="fas fa-times"></i> Reject
+                        </button>
+                    ` : ''}
+                    <button onclick="viewUserDetails('${user.id}')" class="btn btn-sm btn-secondary" title="View Details">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function approveUser(userId) {
+    const user = mockData.users.find(u => u.id === userId);
+    if (!user) return;
+    
+    user.status = 'approved';
+    user.approvedAt = new Date().toISOString().split('T')[0];
+    user.approvedBy = currentUser ? currentUser.username : 'admin';
+    
+    saveMockData();
+    loadUsersTable();
+    updateDashboardStats();
+    
+    showSuccessMessage(`User ${user.username} has been approved successfully!`);
+}
+
+function rejectUser(userId) {
+    const user = mockData.users.find(u => u.id === userId);
+    if (!user) return;
+    
+    if (confirm(`Are you sure you want to reject ${user.username}? This action cannot be undone.`)) {
+        user.status = 'rejected';
+        user.approvedAt = new Date().toISOString().split('T')[0];
+        user.approvedBy = currentUser ? currentUser.username : 'admin';
+        
+        saveMockData();
+        loadUsersTable();
+        updateDashboardStats();
+        
+        showSuccessMessage(`User ${user.username} has been rejected.`);
+    }
+}
+
+function viewUserDetails(userId) {
+    const user = mockData.users.find(u => u.id === userId);
+    if (!user) return;
+    
+    const userHtml = `
+        <div class="user-details">
+            <h4>User Details</h4>
+            <div class="detail-item">
+                <strong>User ID:</strong> ${user.id}
+            </div>
+            <div class="detail-item">
+                <strong>Full Name:</strong> ${user.fullName}
+            </div>
+            <div class="detail-item">
+                <strong>Username:</strong> ${user.username}
+            </div>
+            <div class="detail-item">
+                <strong>Email:</strong> ${user.email}
+            </div>
+            <div class="detail-item">
+                <strong>Phone:</strong> ${user.phone}
+            </div>
+            <div class="detail-item">
+                <strong>National ID:</strong> ${user.nationalId}
+            </div>
+            <div class="detail-item">
+                <strong>Address:</strong> ${user.address}
+            </div>
+            <div class="detail-item">
+                <strong>Status:</strong> <span style="color: ${user.status === 'approved' ? '#28a745' : user.status === 'pending' ? '#ffc107' : '#dc3545'}">${user.status.charAt(0).toUpperCase() + user.status.slice(1)}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Created At:</strong> ${user.createdAt}
+            </div>
+            ${user.approvedAt ? `
+                <div class="detail-item">
+                    <strong>${user.status === 'approved' ? 'Approved' : 'Rejected'} At:</strong> ${user.approvedAt}
+                </div>
+                <div class="detail-item">
+                    <strong>${user.status === 'approved' ? 'Approved' : 'Rejected'} By:</strong> ${user.approvedBy}
+                </div>
+            ` : ''}
+        </div>
+    `;
+    
+    showModal('User Details', userHtml);
+}
+
+function updateRequestStatus(requestId, newStatus) {
     const request = mockData.requests.find(req => req.id === requestId);
     if (!request) return;
     
-    const statuses = ['Pending', 'Approved', 'Completed', 'Rejected'];
-    const currentIndex = statuses.indexOf(request.status);
-    const nextIndex = (currentIndex + 1) % statuses.length;
-    
-    request.status = statuses[nextIndex];
+    const oldStatus = request.status;
+    request.status = newStatus;
     saveMockData();
     loadRequestsTable();
+    updateDashboardStats();
     
-    showSuccessMessage(`Request ${requestId} status updated to ${request.status}`);
+    showSuccessMessage(`Request ${requestId} status updated from ${oldStatus} to ${newStatus}`);
 }
 
 function viewComplaint(complaintId) {
@@ -941,13 +1242,7 @@ function setupEventListeners() {
         trackBtn.addEventListener('click', trackRequest);
     }
     
-    // Payment simulation
-    const paymentBtn = document.getElementById('payment-btn');
-    if (paymentBtn) {
-        paymentBtn.addEventListener('click', function() {
-            showSuccessMessage('Payment processed successfully! (Simulation)');
-        });
-    }
+    // Payment is now integrated into request forms
     
     // File upload preview
     const fileInputs = document.querySelectorAll('input[type="file"]');
@@ -973,8 +1268,66 @@ function initializePage() {
             initializeDashboardCharts();
             break;
         case 'citizen.html':
+            checkCitizenAuth();
             loadPollsForVoting();
             break;
+        case 'login.html':
+        case 'signup.html':
+            // Allow access to login/signup pages
+            break;
+    }
+}
+
+// Check if citizen is authenticated
+function checkCitizenAuth() {
+    const savedUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    if (savedUser && savedUser.role === 'citizen') {
+        currentUser = savedUser;
+        updateCitizenNav();
+    } else {
+        // Not logged in, show login prompt
+        showErrorMessage('Please login to access the citizen portal. / يرجى تسجيل الدخول للوصول إلى بوابة المواطن.');
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+    }
+}
+
+// Update navigation based on login status
+function updateCitizenNav() {
+    const loginLink = document.getElementById('login-nav-link');
+    const signupLink = document.getElementById('signup-nav-link');
+    const userMenu = document.getElementById('user-menu');
+    const userNameDisplay = document.getElementById('user-name-display');
+    
+    if (currentUser && currentUser.role === 'citizen') {
+        if (loginLink) loginLink.style.display = 'none';
+        if (signupLink) signupLink.style.display = 'none';
+        if (userMenu) {
+            userMenu.style.display = 'flex';
+            userMenu.style.alignItems = 'center';
+        }
+        if (userNameDisplay && currentUser.fullName) {
+            userNameDisplay.textContent = currentUser.fullName;
+        }
+    } else {
+        if (loginLink) loginLink.style.display = '';
+        if (signupLink) signupLink.style.display = '';
+        if (userMenu) userMenu.style.display = 'none';
+    }
+}
+
+// Logout function for citizens
+function logoutCitizen() {
+    if (confirm('Are you sure you want to logout? / هل أنت متأكد أنك تريد تسجيل الخروج؟')) {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('rememberMe');
+        currentUser = null;
+        showSuccessMessage('Logged out successfully / تم تسجيل الخروج بنجاح');
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 1000);
     }
 }
 
@@ -1444,6 +1797,239 @@ function initializeAppEnhanced() {
     initializeSearch();
     initializeKeyboardNavigation();
     initializeAccessibility();
+}
+
+// ===== REQUEST FORM MODAL FUNCTIONS =====
+function openRequestForm(formType) {
+    const formModal = document.getElementById(`${formType}-form`);
+    if (formModal) {
+        formModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // Scroll to top of modal
+        formModal.scrollTop = 0;
+    }
+}
+
+function closeRequestForm(formType) {
+    const formModal = document.getElementById(`${formType}-form`);
+    if (formModal) {
+        formModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        
+        // Reset form
+        const form = formModal.querySelector('form');
+        if (form) {
+            form.reset();
+            // Reset payment fields visibility
+            togglePaymentFields(formType);
+        }
+    }
+}
+
+// Toggle online payment fields based on payment type selection
+function togglePaymentFields(formType) {
+    const formModal = document.getElementById(`${formType}-form`);
+    if (!formModal) return;
+    
+    const form = formModal.querySelector('form');
+    if (!form) return;
+    
+    const paymentTypeSelect = form.querySelector('select[name="paymentType"]');
+    const onlineFields = document.getElementById(`${formType}-online-fields`);
+    const paymentMethodSelect = document.getElementById(`${formType}-paymentMethod`);
+    
+    if (!paymentTypeSelect || !onlineFields || !paymentMethodSelect) return;
+    
+    const paymentType = paymentTypeSelect.value;
+    
+    if (paymentType === 'online') {
+        // Show online payment fields
+        onlineFields.style.display = 'block';
+        // Make payment method required
+        paymentMethodSelect.setAttribute('required', 'required');
+    } else {
+        // Hide online payment fields
+        onlineFields.style.display = 'none';
+        // Remove required attribute from payment method
+        paymentMethodSelect.removeAttribute('required');
+        // Clear payment method value
+        paymentMethodSelect.value = '';
+    }
+}
+
+// Close form modal when clicking outside
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('request-form-modal')) {
+        const formModal = e.target;
+        formModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        
+        // Reset form
+        const form = formModal.querySelector('form');
+        if (form) {
+            form.reset();
+        }
+    }
+});
+
+// Close form modal with escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const activeForm = document.querySelector('.request-form-modal.active');
+        if (activeForm) {
+            activeForm.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Reset form
+            const form = activeForm.querySelector('form');
+            if (form) {
+                form.reset();
+            }
+        }
+    }
+});
+
+// Handle request form submissions
+document.addEventListener('submit', function(e) {
+    const form = e.target;
+    if (form.classList.contains('request-form')) {
+        e.preventDefault();
+        
+        const requestType = form.dataset.requestType;
+        const formData = new FormData(form);
+        
+        // Get payment type
+        const paymentType = formData.get('paymentType');
+        if (!paymentType) {
+            showErrorMessage('Please select a payment type / يرجى اختيار نوع الدفع');
+            return;
+        }
+        
+        // Show loading
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+        
+        // Simulate API call
+        setTimeout(() => {
+            const amount = getRequestPrice(requestType);
+            const paymentMethod = formData.get('paymentMethod');
+            
+            // Validate online payment
+            if (paymentType === 'online' && !paymentMethod) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+                showErrorMessage('Please select a payment method for online payment / يرجى اختيار طريقة الدفع للدفع عبر الإنترنت');
+                return;
+            }
+            
+            // Simulate payment processing for online payments
+            if (paymentType === 'online') {
+                setTimeout(() => {
+                    // Create request object
+                    const newRequest = {
+                        id: 'REQ' + String(mockData.requests.length + 1).padStart(3, '0'),
+                        type: getRequestTypeName(requestType),
+                        status: 'Pending',
+                        date: new Date().toISOString().split('T')[0],
+                        citizen: formData.get('fullName'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone'),
+                        amount: amount,
+                        paymentType: paymentType,
+                        paymentMethod: paymentMethod,
+                        paymentStatus: 'Paid'
+                    };
+                    
+                    mockData.requests.push(newRequest);
+                    saveMockData();
+                    
+                    // Reset button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    
+                    // Close modal
+                    const formModal = form.closest('.request-form-modal');
+                    if (formModal) {
+                        formModal.classList.remove('active');
+                        document.body.style.overflow = 'auto';
+                    }
+                    
+                    // Reset form
+                    form.reset();
+                    togglePaymentFields(requestType);
+                    
+                    // Show success message
+                    showSuccessMessage(`Request submitted and payment processed successfully! Your request ID is: ${newRequest.id}. Amount paid: ${amount.toLocaleString()} LBP`);
+                }, 1000);
+            } else {
+                // In-person payment - no payment processing needed
+                const newRequest = {
+                    id: 'REQ' + String(mockData.requests.length + 1).padStart(3, '0'),
+                    type: getRequestTypeName(requestType),
+                    status: 'Pending',
+                    date: new Date().toISOString().split('T')[0],
+                    citizen: formData.get('fullName'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    amount: amount,
+                    paymentType: paymentType,
+                    paymentStatus: 'Pending'
+                };
+                
+                mockData.requests.push(newRequest);
+                saveMockData();
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+                
+                // Close modal
+                const formModal = form.closest('.request-form-modal');
+                if (formModal) {
+                    formModal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+                
+                // Reset form
+                form.reset();
+                togglePaymentFields(requestType);
+                
+                // Show success message
+                showSuccessMessage(`Request submitted successfully! Your request ID is: ${newRequest.id}. Please pay ${amount.toLocaleString()} LBP when you visit the municipal office.`);
+            }
+        }, 1500);
+    }
+});
+
+function getRequestTypeName(requestType) {
+    const typeMap = {
+        'building-permit': 'Building Permit Application',
+        'occupancy-permit': 'Occupancy Permit',
+        'zoning-certificate': 'Zoning & Servitude Certificate',
+        'property-content': 'Property Content Certificate',
+        'violation-settlement': 'Building Violation Settlement',
+        'subdivision': 'Subdivision Request',
+        'financial-clearance': 'Municipal Financial Clearance',
+        'advertisement-permit': 'Permanent Advertisement Permit'
+    };
+    return typeMap[requestType] || requestType;
+}
+
+function getRequestPrice(requestType) {
+    const priceMap = {
+        'building-permit': 500000,
+        'occupancy-permit': 300000,
+        'zoning-certificate': 150000,
+        'property-content': 100000,
+        'violation-settlement': 1000000,
+        'subdivision': 750000,
+        'financial-clearance': 200000,
+        'advertisement-permit': 400000
+    };
+    return priceMap[requestType] || 0;
 }
 
 // Override the original initialization

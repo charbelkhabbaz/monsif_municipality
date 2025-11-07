@@ -105,59 +105,120 @@
                 </div>
             </div>
             
-            <!-- Dashboard Stats -->
-            <div class="dashboard-stats">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-file-alt"></i>
+            <!-- Admin Tabs -->
+            <div class="admin-tabs">
+                <button class="tab-button active" onclick="switchTab('dashboard')" data-tab="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </button>
+                <button class="tab-button" onclick="switchTab('requests')" data-tab="requests">
+                    <i class="fas fa-file-alt"></i>
+                    Requests
+                    <span class="badge" id="requests-badge">0</span>
+                </button>
+                <button class="tab-button" onclick="switchTab('citizens')" data-tab="citizens">
+                    <i class="fas fa-users"></i>
+                    Citizens
+                    <span class="badge" id="citizens-badge">0</span>
+                </button>
+            </div>
+            
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content active">
+                <!-- Dashboard Stats -->
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="total-requests">0</div>
+                            <div class="stat-label">Total Requests</div>
+                        </div>
                     </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="total-requests">0</div>
-                        <div class="stat-label">Total Requests</div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="pending-requests">0</div>
+                            <div class="stat-label">Pending Requests</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="completed-requests">0</div>
+                            <div class="stat-label">Completed Requests</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="rejected-requests">0</div>
+                            <div class="stat-label">Rejected Requests</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="total-citizens">0</div>
+                            <div class="stat-label">Total Citizens</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="pending-citizens">0</div>
+                            <div class="stat-label">Pending Approvals</div>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="total-complaints">0</div>
-                        <div class="stat-label">Complaints</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-vote-yea"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="total-polls">0</div>
-                        <div class="stat-label">Active Polls</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-newspaper"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="total-news">0</div>
-                        <div class="stat-label">News Articles</div>
+                <!-- Recent Activity -->
+                <div class="admin-section">
+                    <h2>Recent Activity</h2>
+                    <div class="recent-activity">
+                        <div class="activity-item">
+                            <i class="fas fa-file-alt"></i>
+                            <div class="activity-content">
+                                <p><strong>Latest Requests:</strong> <span id="latest-requests-count">0</span> in the last 7 days</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-user-plus"></i>
+                            <div class="activity-content">
+                                <p><strong>New Citizens:</strong> <span id="new-citizens-count">0</span> registered this week</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Admin Sections -->
-            <div class="admin-sections">
-                <!-- Requests Management -->
+            <!-- Requests Tab -->
+            <div id="requests-tab" class="tab-content">
                 <div class="admin-section">
                     <div class="section-header">
                         <h2>Manage Citizen Requests</h2>
-                        <button class="btn btn-primary" onclick="showAddRequestForm()">
-                            <i class="fas fa-plus"></i>
-                            Add Request
-                        </button>
+                        <div class="filter-buttons">
+                            <button class="btn btn-sm btn-secondary" onclick="filterRequests('all')">All</button>
+                            <button class="btn btn-sm btn-secondary" onclick="filterRequests('pending')">Pending</button>
+                            <button class="btn btn-sm btn-secondary" onclick="filterRequests('completed')">Completed</button>
+                            <button class="btn btn-sm btn-secondary" onclick="filterRequests('rejected')">Rejected</button>
+                        </div>
                     </div>
                     
                     <div class="table-container">
@@ -167,7 +228,11 @@
                                     <th>Request ID</th>
                                     <th>Type</th>
                                     <th>Citizen</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
                                     <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Payment Status</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -178,76 +243,41 @@
                         </table>
                     </div>
                 </div>
-                
-                <!-- Complaints Management -->
+            </div>
+            
+            <!-- Citizens Tab -->
+            <div id="citizens-tab" class="tab-content">
                 <div class="admin-section">
                     <div class="section-header">
-                        <h2>Manage Complaints</h2>
-                        <button class="btn btn-primary" onclick="showAddComplaintForm()">
-                            <i class="fas fa-plus"></i>
-                            Add Complaint
-                        </button>
+                        <h2>Citizen Management / إدارة المواطنين</h2>
+                        <div class="filter-buttons">
+                            <button class="btn btn-sm btn-secondary" onclick="filterCitizens('all')">All</button>
+                            <button class="btn btn-sm btn-secondary" onclick="filterCitizens('pending')">Pending</button>
+                            <button class="btn btn-sm btn-secondary" onclick="filterCitizens('approved')">Approved</button>
+                            <button class="btn btn-sm btn-secondary" onclick="filterCitizens('rejected')">Rejected</button>
+                        </div>
                     </div>
                     
                     <div class="table-container">
                         <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th>Complaint ID</th>
-                                    <th>Type</th>
-                                    <th>Citizen</th>
-                                    <th>Date</th>
+                                    <th>User ID</th>
+                                    <th>Full Name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>National ID</th>
+                                    <th>Address</th>
                                     <th>Status</th>
+                                    <th>Created</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="complaints-table-body">
-                                <!-- Complaints will be loaded dynamically -->
+                            <tbody id="users-table-body">
+                                <!-- Users will be loaded dynamically -->
                             </tbody>
                         </table>
-                    </div>
-                </div>
-                
-                <!-- Polls Management -->
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h2>Manage Polls</h2>
-                        <button class="btn btn-primary" onclick="showAddPollForm()">
-                            <i class="fas fa-plus"></i>
-                            Create Poll
-                        </button>
-                    </div>
-                    
-                    <div class="table-container">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Poll ID</th>
-                                    <th>Question</th>
-                                    <th>Votes</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="polls-table-body">
-                                <!-- Polls will be loaded dynamically -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- News Management -->
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h2>Manage News</h2>
-                        <button class="btn btn-primary" onclick="showAddNewsForm()">
-                            <i class="fas fa-plus"></i>
-                            Add News
-                        </button>
-                    </div>
-                    
-                    <div id="news-list" class="news-list">
-                        <!-- News will be loaded dynamically -->
                     </div>
                 </div>
             </div>
@@ -610,6 +640,98 @@
             font-weight: 500;
         }
         
+        /* Admin Tabs */
+        .admin-tabs {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-2xl);
+            border-bottom: 2px solid var(--accent-grey);
+        }
+        
+        .tab-button {
+            padding: var(--spacing-md) var(--spacing-xl);
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: var(--font-size-lg);
+            font-weight: 500;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .tab-button:hover {
+            color: var(--accent-blue);
+            background: var(--secondary-grey);
+        }
+        
+        .tab-button.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+            font-weight: 600;
+        }
+        
+        .tab-button .badge {
+            background: var(--accent-red);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+            margin-left: var(--spacing-xs);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        .recent-activity {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--secondary-grey);
+            border-radius: var(--radius-md);
+        }
+        
+        .activity-item i {
+            font-size: var(--font-size-xl);
+            color: var(--accent-blue);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        .form-select-sm {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            font-size: var(--font-size-sm);
+            border: 1px solid var(--accent-grey);
+            border-radius: var(--radius-sm);
+            background: var(--primary-white);
+        }
+        
         .admin-sections {
             display: flex;
             flex-direction: column;
@@ -844,13 +966,103 @@
             document.getElementById('add-news-modal').classList.add('active');
         }
         
+        // Tab switching function
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked button
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            
+            // Load data for the selected tab
+            if (tabName === 'requests') {
+                loadRequestsTable();
+            } else if (tabName === 'citizens') {
+                loadUsersTable();
+            } else if (tabName === 'dashboard') {
+                updateDashboardStats();
+            }
+        }
+        
+        // Filter requests by status
+        let currentRequestFilter = 'all';
+        function filterRequests(status) {
+            currentRequestFilter = status;
+            loadRequestsTable();
+            
+            // Update filter button states
+            document.querySelectorAll('.filter-buttons button').forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-secondary');
+            });
+            event.target.classList.remove('btn-secondary');
+            event.target.classList.add('btn-primary');
+        }
+        
+        // Filter citizens by status
+        let currentCitizenFilter = 'all';
+        function filterCitizens(status) {
+            currentCitizenFilter = status;
+            loadUsersTable();
+            
+            // Update filter button states
+            document.querySelectorAll('#citizens-tab .filter-buttons button').forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-secondary');
+            });
+            event.target.classList.remove('btn-secondary');
+            event.target.classList.add('btn-primary');
+        }
+        
         // Update dashboard stats
         function updateDashboardStats() {
-            document.getElementById('total-requests').textContent = mockData.requests.length;
-            document.getElementById('total-complaints').textContent = mockData.complaints.length;
-            document.getElementById('total-polls').textContent = mockData.polls.filter(p => p.active).length;
-            document.getElementById('total-news').textContent = mockData.news.length;
+            const requests = mockData.requests || [];
+            const users = mockData.users || [];
+            
+            document.getElementById('total-requests').textContent = requests.length;
+            document.getElementById('pending-requests').textContent = requests.filter(r => r.status === 'Pending').length;
+            document.getElementById('completed-requests').textContent = requests.filter(r => r.status === 'Completed').length;
+            document.getElementById('rejected-requests').textContent = requests.filter(r => r.status === 'Rejected').length;
+            document.getElementById('total-citizens').textContent = users.length;
+            document.getElementById('pending-citizens').textContent = users.filter(u => u.status === 'pending').length;
+            
+            // Update badges
+            const pendingRequests = requests.filter(r => r.status === 'Pending').length;
+            const pendingUsers = users.filter(u => u.status === 'pending').length;
+            document.getElementById('requests-badge').textContent = pendingRequests;
+            document.getElementById('citizens-badge').textContent = pendingUsers;
+            
+            // Recent activity
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            const recentRequests = requests.filter(r => {
+                const requestDate = new Date(r.date);
+                return requestDate >= sevenDaysAgo;
+            }).length;
+            const recentUsers = users.filter(u => {
+                const userDate = new Date(u.createdAt);
+                return userDate >= sevenDaysAgo;
+            }).length;
+            
+            document.getElementById('latest-requests-count').textContent = recentRequests;
+            document.getElementById('new-citizens-count').textContent = recentUsers;
         }
+        
+        // Make updateDashboardStats globally accessible
+        window.updateDashboardStats = updateDashboardStats;
+        window.switchTab = switchTab;
+        window.filterRequests = filterRequests;
+        window.filterCitizens = filterCitizens;
         
         // Override the admin dashboard loading to include stats update
         const originalLoadAdminDashboard = loadAdminDashboard;
