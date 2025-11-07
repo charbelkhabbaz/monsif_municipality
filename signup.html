@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Citizen Sign Up - Monsif e-Municipality">
+    <title>Sign Up - Monsif e-Municipality</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="navbar container">
+            <div class="logo">
+                <a href="index.html" aria-label="Monsif Municipality home">
+                    <img src="images/Capture.PNG" alt="Monsif Municipality Logo" class="logo-image">
+                    <span>Monsif e-Municipality</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="citizen.html" class="nav-link">Citizen Portal</a></li>
+                <li><a href="login.html" class="nav-link">Login</a></li>
+                <li><a href="signup.html" class="nav-link active">Sign Up</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    ☰
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sign Up Section -->
+    <section class="section" id="signup-section">
+        <div class="container">
+            <div class="login-container">
+                <div class="login-card fade-in">
+                    <div class="login-header">
+                        <h2>Create Account / إنشاء حساب</h2>
+                        <p>Sign up to access municipal services / سجل للوصول إلى الخدمات البلدية</p>
+                    </div>
+                    
+                    <form id="signup-form" data-form-type="signup">
+                        <div class="form-group">
+                            <label for="fullName" class="form-label">Full Name / الاسم الكامل *</label>
+                            <input type="text" id="fullName" name="fullName" class="form-input" 
+                                placeholder="Enter your full name / أدخل اسمك الكامل" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email / البريد الإلكتروني *</label>
+                            <input type="email" id="email" name="email" class="form-input" 
+                                placeholder="Enter your email / أدخل بريدك الإلكتروني" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone Number / رقم الهاتف *</label>
+                            <input type="tel" id="phone" name="phone" class="form-input" 
+                                placeholder="Enter your phone number / أدخل رقم هاتفك" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nationalId" class="form-label">National ID / رقم الهوية *</label>
+                            <input type="text" id="nationalId" name="nationalId" class="form-input" 
+                                placeholder="Enter your national ID / أدخل رقم هويتك" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address" class="form-label">Address / العنوان *</label>
+                            <textarea id="address" name="address" class="form-input" rows="3" 
+                                placeholder="Enter your address / أدخل عنوانك" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="username" class="form-label">Username / اسم المستخدم *</label>
+                            <input type="text" id="username" name="username" class="form-input" 
+                                placeholder="Choose a username / اختر اسم مستخدم" required>
+                            <small>Must be unique / يجب أن يكون فريداً</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password / كلمة المرور *</label>
+                            <input type="password" id="password" name="password" class="form-input" 
+                                placeholder="Create a password / أنشئ كلمة مرور" required minlength="6">
+                            <small>Minimum 6 characters / الحد الأدنى 6 أحرف</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword" class="form-label">Confirm Password / تأكيد كلمة المرور *</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" 
+                                placeholder="Confirm your password / أكد كلمة المرور" required>
+                            <small id="password-match-error" style="color: #dc3545; display: none;">Passwords do not match / كلمات المرور غير متطابقة</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="terms" name="terms" required>
+                                <span class="checkmark"></span>
+                                I agree to the Terms and Conditions / أوافق على الشروط والأحكام *
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-user-plus"></i>
+                            Sign Up / إنشاء حساب
+                        </button>
+                    </form>
+                    
+                    <div class="login-footer">
+                        <p>Already have an account? / لديك حساب بالفعل؟</p>
+                        <a href="login.html" class="btn btn-secondary btn-full">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login / تسجيل الدخول
+                        </a>
+                    </div>
+                    
+                    <div class="signup-notice">
+                        <p><i class="fas fa-info-circle"></i> <strong>Note:</strong> Your account will be reviewed by an administrator. You will be able to log in once your account is approved. / سيتم مراجعة حسابك من قبل المسؤول. ستتمكن من تسجيل الدخول بمجرد الموافقة على حسابك.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Monsif e-Municipality</h3>
+                    <p>Modern Services for Modern Citizens</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="citizen.html">Citizen Portal</a></li>
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="signup.html">Sign Up</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: info@monsif.gov.lb</p>
+                    <p>Phone: +961-XX-XXXXXX</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Monsif e-Municipality. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script>
+        // Real-time password confirmation validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const passwordMatchError = document.getElementById('password-match-error');
+            
+            function validatePasswordMatch() {
+                if (confirmPassword.value && password.value !== confirmPassword.value) {
+                    passwordMatchError.style.display = 'block';
+                    confirmPassword.setCustomValidity('Passwords do not match');
+                } else {
+                    passwordMatchError.style.display = 'none';
+                    confirmPassword.setCustomValidity('');
+                }
+            }
+            
+            password.addEventListener('input', validatePasswordMatch);
+            confirmPassword.addEventListener('input', validatePasswordMatch);
+        });
+    </script>
+</body>
+</html>
+

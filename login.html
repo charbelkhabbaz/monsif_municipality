@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Citizen Login - Monsif e-Municipality">
+    <title>Login - Monsif e-Municipality</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="navbar container">
+            <div class="logo">
+                <a href="index.html" aria-label="Monsif Municipality home">
+                    <img src="images/Capture.PNG" alt="Monsif Municipality Logo" class="logo-image">
+                    <span>Monsif e-Municipality</span>
+                </a>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="citizen.html" class="nav-link">Citizen Portal</a></li>
+                <li><a href="login.html" class="nav-link active">Login</a></li>
+                <li><a href="signup.html" class="nav-link">Sign Up</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    ☰
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Login Section -->
+    <section class="section" id="login-section">
+        <div class="container">
+            <div class="login-container">
+                <div class="login-card fade-in">
+                    <div class="login-header">
+                        <h2>Citizen Login / تسجيل الدخول</h2>
+                        <p>Access your municipal services account / الوصول إلى حساب الخدمات البلدية</p>
+                    </div>
+                    
+                    <form id="citizen-login-form" data-form-type="citizen-login">
+                        <div class="form-group">
+                            <label for="username" class="form-label">Username / اسم المستخدم *</label>
+                            <input type="text" id="username" name="username" class="form-input" 
+                                placeholder="Enter your username / أدخل اسم المستخدم" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password / كلمة المرور *</label>
+                            <input type="password" id="password" name="password" class="form-input" 
+                                placeholder="Enter your password / أدخل كلمة المرور" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="remember-me" name="rememberMe">
+                                <span class="checkmark"></span>
+                                Remember me / تذكرني
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login / تسجيل الدخول
+                        </button>
+                    </form>
+                    
+                    <div class="login-footer">
+                        <p>Don't have an account? / ليس لديك حساب؟</p>
+                        <a href="signup.html" class="btn btn-secondary btn-full">
+                            <i class="fas fa-user-plus"></i>
+                            Sign Up / إنشاء حساب
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Monsif e-Municipality</h3>
+                    <p>Modern Services for Modern Citizens</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="citizen.html">Citizen Portal</a></li>
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="signup.html">Sign Up</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: info@monsif.gov.lb</p>
+                    <p>Phone: +961-XX-XXXXXX</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Monsif e-Municipality. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+</body>
+</html>
+

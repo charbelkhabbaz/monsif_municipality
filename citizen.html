@@ -24,8 +24,9 @@
             <ul class="nav-menu">
                 <li><a href="index.html" class="nav-link">Home</a></li>
                 <li><a href="citizen.html" class="nav-link active">Citizen Portal</a></li>
+                <li><a href="login.html" class="nav-link" id="login-nav-link">Login</a></li>
+                <li><a href="signup.html" class="nav-link" id="signup-nav-link">Sign Up</a></li>
                 <li><a href="admin.html" class="nav-link">Admin Portal</a></li>
-                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
                 <li><a href="contact.html" class="nav-link">Contact</a></li>
             </ul>
             
@@ -33,6 +34,13 @@
                 <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
                     <i class="fas fa-moon"></i>
                 </button>
+                <div id="user-menu" style="display: none;">
+                    <span id="user-name-display" style="margin-right: 10px;"></span>
+                    <button class="btn btn-sm btn-secondary" onclick="logoutCitizen()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
                 <button class="mobile-menu-toggle" id="mobile-menu-toggle">
                     ☰
                 </button>
@@ -64,10 +72,6 @@
                     <i class="fas fa-search"></i>
                     <span>Track</span>
                 </a>
-                <a href="#payments" class="service-nav-item" data-section="payments">
-                    <i class="fas fa-credit-card"></i>
-                    <span>Payments</span>
-                </a>
                 <a href="#complaints" class="service-nav-item" data-section="complaints">
                     <i class="fas fa-exclamation-triangle"></i>
                     <span>Complaints</span>
@@ -90,98 +94,74 @@
             <div class="section-header fade-in">
                 <h2 class="section-title">Submit a Request</h2>
                 <p class="section-subtitle">
-                    Request documents, permits, or other municipal services online
+                    Select a municipal service request and fill out the required form
                 </p>
             </div>
             
-            <div class="grid grid-2">
-                <div class="card fade-in">
-                    <h3>Request Information</h3>
-                    <form id="request-form" data-form-type="request">
-                        <div class="form-group">
-                            <label for="citizenName" class="form-label">Full Name *</label>
-                            <input type="text" id="citizenName" name="citizenName" class="form-input" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="citizenEmail" class="form-label">Email Address *</label>
-                            <input type="email" id="citizenEmail" name="citizenEmail" class="form-input" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="citizenPhone" class="form-label">Phone Number *</label>
-                            <input type="tel" id="citizenPhone" name="citizenPhone" class="form-input" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="requestType" class="form-label">Request Type *</label>
-                            <select id="requestType" name="requestType" class="form-select" required>
-                                <option value="">Select request type</option>
-                                <option value="Building Permit">Building Permit</option>
-                                <option value="Business License">Business License</option>
-                                <option value="Marriage Certificate">Marriage Certificate</option>
-                                <option value="Birth Certificate">Birth Certificate</option>
-                                <option value="Property Registration">Property Registration</option>
-                                <option value="Municipal Services">Municipal Services</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="description" class="form-label">Description *</label>
-                            <textarea id="description" name="description" class="form-textarea" 
-                                placeholder="Please provide detailed information about your request" required></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="documents" class="form-label">Supporting Documents</label>
-                            <input type="file" id="documents" name="documents" class="form-input" 
-                                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple>
-                            <small class="form-help">Upload PDF, images, or documents (max 10MB each)</small>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-paper-plane"></i>
-                            Submit Request
-                        </button>
-                    </form>
+            <!-- Request Types Grid -->
+            <div class="grid grid-4 request-types-grid">
+                <div class="request-type-card fade-in" onclick="openRequestForm('building-permit')">
+                    <div class="request-icon">🏗</div>
+                    <h3>Building Permit</h3>
+                    <p class="request-arabic">طلب ترخيص بالبناء</p>
+                    <p class="request-description">Building Permit Application</p>
+                    <div class="request-price">500,000 LBP</div>
                 </div>
                 
-                <div class="card fade-in">
-                    <h3>Request Guidelines</h3>
-                    <div class="guidelines">
-                        <div class="guideline-item">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <h4>Required Information</h4>
-                                <p>Please provide complete and accurate information to avoid delays</p>
-                            </div>
-                        </div>
-                        
-                        <div class="guideline-item">
-                            <i class="fas fa-clock"></i>
-                            <div>
-                                <h4>Processing Time</h4>
-                                <p>Most requests are processed within 5-10 business days</p>
-                            </div>
-                        </div>
-                        
-                        <div class="guideline-item">
-                            <i class="fas fa-file-alt"></i>
-                            <div>
-                                <h4>Document Requirements</h4>
-                                <p>Upload clear, legible copies of required documents</p>
-                            </div>
-                        </div>
-                        
-                        <div class="guideline-item">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <h4>Notifications</h4>
-                                <p>You'll receive email updates on your request status</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="request-type-card fade-in" onclick="openRequestForm('occupancy-permit')">
+                    <div class="request-icon">🔑</div>
+                    <h3>Occupancy Permit</h3>
+                    <p class="request-arabic">طلب رخصة إشغال</p>
+                    <p class="request-description">Completion Certificate</p>
+                    <div class="request-price">300,000 LBP</div>
+                </div>
+                
+                <div class="request-type-card fade-in" onclick="openRequestForm('zoning-certificate')">
+                    <div class="request-icon">📝</div>
+                    <h3>Zoning Certificate</h3>
+                    <p class="request-arabic">طلب إفادة تخطيط وارتفاق</p>
+                    <p class="request-description">Zoning & Servitude Certificate</p>
+                    <div class="request-price">150,000 LBP</div>
+                </div>
+                
+                <div class="request-type-card fade-in" onclick="openRequestForm('property-content')">
+                    <div class="request-icon">📄</div>
+                    <h3>Property Content</h3>
+                    <p class="request-arabic">طلب إفادة محتويات</p>
+                    <p class="request-description">Property Content Certificate</p>
+                    <div class="request-price">100,000 LBP</div>
+                </div>
+                
+                <div class="request-type-card fade-in" onclick="openRequestForm('violation-settlement')">
+                    <div class="request-icon">💔</div>
+                    <h3>Violation Settlement</h3>
+                    <p class="request-arabic">طلب تسوية مخالفة بناء</p>
+                    <p class="request-description">Building Violation Settlement</p>
+                    <div class="request-price">1,000,000 LBP</div>
+                </div>
+                
+                <div class="request-type-card fade-in" onclick="openRequestForm('subdivision')">
+                    <div class="request-icon">🗺</div>
+                    <h3>Subdivision</h3>
+                    <p class="request-arabic">طلب إفراز (تقسيم عقار)</p>
+                    <p class="request-description">Subdivision Request - Afraz</p>
+                    <div class="request-price">750,000 LBP</div>
+                </div>
+                
+                <div class="request-type-card fade-in" onclick="openRequestForm('financial-clearance')">
+                    <div class="request-icon">📜</div>
+                    <h3>Financial Clearance</h3>
+                    <p class="request-arabic">طلب براءة ذمة بلدية</p>
+                    <p class="request-description">Municipal Financial Clearance</p>
+                    <div class="request-price">200,000 LBP</div>
+                </div>
+                
+                <div class="request-type-card fade-in" onclick="openRequestForm('advertisement-permit')">
+                    <div class="request-icon">🖼</div>
+                    <h3>Advertisement Permit</h3>
+                    <p class="request-arabic">طلب ترخيص للإعلان الدائم</p>
+                    <p class="request-description">Permanent Advertisement Permit</p>
+                    <div class="request-price">400,000 LBP</div>
                 </div>
             </div>
         </div>
@@ -219,106 +199,6 @@
                             <li>REQ002 - Business License</li>
                             <li>REQ003 - Marriage Certificate</li>
                         </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Payments Section -->
-    <section class="section" id="payments">
-        <div class="container">
-            <div class="section-header fade-in">
-                <h2 class="section-title">Online Payments</h2>
-                <p class="section-subtitle">
-                    Pay municipal fees, taxes, and fines securely online
-                </p>
-            </div>
-            
-            <div class="grid grid-2">
-                <div class="card fade-in">
-                    <h3>Payment Information</h3>
-                    <form id="payment-form">
-                        <div class="form-group">
-                            <label for="paymentType" class="form-label">Payment Type *</label>
-                            <select id="paymentType" name="paymentType" class="form-select" required>
-                                <option value="">Select payment type</option>
-                                <option value="Municipal Tax">Municipal Tax</option>
-                                <option value="Building Permit Fee">Building Permit Fee</option>
-                                <option value="Business License Fee">Business License Fee</option>
-                                <option value="Traffic Fine">Traffic Fine</option>
-                                <option value="Utility Bill">Utility Bill</option>
-                                <option value="Other Fee">Other Fee</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="amount" class="form-label">Amount (LBP) *</label>
-                            <input type="number" id="amount" name="amount" class="form-input" 
-                                placeholder="Enter amount in Lebanese Pounds" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="payerName" class="form-label">Payer Name *</label>
-                            <input type="text" id="payerName" name="payerName" class="form-input" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="payerEmail" class="form-label">Email Address *</label>
-                            <input type="email" id="payerEmail" name="payerEmail" class="form-input" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="paymentMethod" class="form-label">Payment Method *</label>
-                            <select id="paymentMethod" name="paymentMethod" class="form-select" required>
-                                <option value="">Select payment method</option>
-                                <option value="Credit Card">Credit Card</option>
-                                <option value="Bank Transfer">Bank Transfer</option>
-                                <option value="Mobile Payment">Mobile Payment</option>
-                            </select>
-                        </div>
-                        
-                        <button type="button" id="payment-btn" class="btn btn-primary">
-                            <i class="fas fa-credit-card"></i>
-                            Process Payment
-                        </button>
-                    </form>
-                </div>
-                
-                <div class="card fade-in">
-                    <h3>Payment Security</h3>
-                    <div class="security-features">
-                        <div class="security-item">
-                            <i class="fas fa-shield-alt"></i>
-                            <div>
-                                <h4>Secure Processing</h4>
-                                <p>All payments are processed through secure, encrypted channels</p>
-                            </div>
-                        </div>
-                        
-                        <div class="security-item">
-                            <i class="fas fa-receipt"></i>
-                            <div>
-                                <h4>Instant Receipt</h4>
-                                <p>Receive immediate confirmation and receipt via email</p>
-                            </div>
-                        </div>
-                        
-                        <div class="security-item">
-                            <i class="fas fa-history"></i>
-                            <div>
-                                <h4>Payment History</h4>
-                                <p>Access your complete payment history anytime</p>
-                            </div>
-                        </div>
-                        
-                        <div class="security-item">
-                            <i class="fas fa-headset"></i>
-                            <div>
-                                <h4>24/7 Support</h4>
-                                <p>Get help with payment issues anytime</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -523,6 +403,961 @@
             </div>
         </div>
     </footer>
+
+    <!-- Request Form Modals -->
+    <!-- Building Permit Form -->
+    <div id="building-permit-form" class="request-form-modal">
+        <div class="request-form-content">
+            <div class="request-form-header">
+                <h2>🏗 Building Permit Application / طلب ترخيص بالبناء</h2>
+                <button class="form-close" onclick="closeRequestForm('building-permit')">&times;</button>
+            </div>
+            <form id="form-building-permit" class="request-form" data-request-type="building-permit">
+                <div class="form-section">
+                    <h3>Personal Information / المعلومات الشخصية</h3>
+                    <div class="form-group">
+                        <label>Full Name / الاسم الكامل *</label>
+                        <input type="text" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email / البريد الإلكتروني *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number / رقم الهاتف *</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Personal ID / الهوية الشخصية *</label>
+                        <input type="file" name="personalId" accept=".pdf,.jpg,.jpeg,.png" required>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Required Documents / المستندات المطلوبة</h3>
+                    <div class="form-group">
+                        <label>Written Application / طلب خطي موقع *</label>
+                        <input type="file" name="writtenApplication" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>Signed by owner or legal representative / موقع من المالك أو من ينوب عنه قانوناً</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Comprehensive Real Estate Certificate / إفادة عقارية شاملة *</label>
+                        <input type="file" name="realEstateCert" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Recent (not older than 3 months) / بتاريخ حديث (لا تتجاوز 3 أشهر)</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Zoning and Servitude Certificate / إفادة تخطيط وارتفاق *</label>
+                        <input type="file" name="zoningCert" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Recent / بتاريخ حديث</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Ownership Deed / سند التمليك *</label>
+                        <input type="file" name="ownershipDeed" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Copy / صورة عن سند التمليك</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Owner's Personal ID / الهوية الشخصية للمالك *</label>
+                        <input type="file" name="ownerId" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Copy / صورة عن الهوية الشخصية</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Engineer Agreement / تكليف واتفاقية *</label>
+                        <input type="file" name="engineerAgreement" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>Signed between owner and engineer / موقعة بين المالك والمهندس المسؤول</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Design Maps and Plans / الخرائط والمخططات التصميمية *</label>
+                        <input type="file" name="designPlans" accept=".pdf,.jpg,.jpeg,.png" multiple required>
+                        <small>Multiple copies, signed and registered / عدة نسخ موقعة ومسجلة لدى نقابة المهندسين</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Site Plan (Croquis) / مصور إجمالي (كروكي) *</label>
+                        <input type="file" name="sitePlan" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Clear plan showing property location / واضح يحدد موقع العقار</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Payment Information / معلومات الدفع</h3>
+                    <div class="payment-summary">
+                        <div class="payment-item">
+                            <span>Service Fee / رسوم الخدمة:</span>
+                            <strong>500,000 LBP</strong>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Type / نوع الدفع *</label>
+                        <select name="paymentType" class="form-select" required onchange="togglePaymentFields('building-permit')">
+                            <option value="">Select payment type / اختر نوع الدفع</option>
+                            <option value="online">Pay Online / الدفع عبر الإنترنت</option>
+                            <option value="in-person">Pay In Person / الدفع في المكتب</option>
+                        </select>
+                    </div>
+                    <div class="online-payment-fields" id="building-permit-online-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>Payment Method / طريقة الدفع *</label>
+                            <select name="paymentMethod" class="form-select" id="building-permit-paymentMethod">
+                                <option value="">Select payment method / اختر طريقة الدفع</option>
+                                <option value="Credit Card">Credit Card / بطاقة ائتمانية</option>
+                                <option value="Bank Transfer">Bank Transfer / تحويل بنكي</option>
+                                <option value="Mobile Payment">Mobile Payment / دفع عبر الهاتف</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number / رقم البطاقة</label>
+                            <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                            <small>Required for Credit Card payment / مطلوب للدفع بالبطاقة الائتمانية</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Cardholder Name / اسم حامل البطاقة</label>
+                            <input type="text" name="cardholderName" placeholder="John Doe">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expiry Date / تاريخ الانتهاء</label>
+                                <input type="text" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV / رمز الأمان</label>
+                                <input type="text" name="cvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeRequestForm('building-permit')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-credit-card"></i>
+                        Submit & Pay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Occupancy Permit Form -->
+    <div id="occupancy-permit-form" class="request-form-modal">
+        <div class="request-form-content">
+            <div class="request-form-header">
+                <h2>🔑 Occupancy Permit / طلب رخصة إشغال</h2>
+                <button class="form-close" onclick="closeRequestForm('occupancy-permit')">&times;</button>
+            </div>
+            <form id="form-occupancy-permit" class="request-form" data-request-type="occupancy-permit">
+                <div class="form-section">
+                    <h3>Personal Information / المعلومات الشخصية</h3>
+                    <div class="form-group">
+                        <label>Full Name / الاسم الكامل *</label>
+                        <input type="text" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email / البريد الإلكتروني *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number / رقم الهاتف *</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Required Documents / المستندات المطلوبة</h3>
+                    <div class="form-group">
+                        <label>Written Application / طلب خطي موقع *</label>
+                        <input type="file" name="writtenApplication" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>Signed by concerned party / موقع من صاحب العلاقة</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Original Building Permit / نسخة طبق الأصل عن رخصة البناء *</label>
+                        <input type="file" name="buildingPermit" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Authentic copy / نسخة طبق الأصل عن رخصة البناء الأصلية</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Technical Department Approval / موافقة الدوائر الفنية *</label>
+                        <input type="file" name="technicalApproval" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Technical inspection confirming conformity / الكشف الفني للتأكد من مطابقة التنفيذ</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Engineer Completion Statement / إفادة إنجاز من المهندس *</label>
+                        <input type="file" name="completionStatement" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>Registered with Syndicate / مسجلة لدى النقابة</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Building Photographs / صور فوتوغرافية للبناء *</label>
+                        <input type="file" name="buildingPhotos" accept=".jpg,.jpeg,.png" multiple required>
+                        <small>Recent photos from all sides / صور حديثة للبناء من جميع جهاته</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Civil Defense Shelter Report / محضر استلام الملجأ (إذا لزم الأمر)</label>
+                        <input type="file" name="shelterReport" accept=".pdf,.jpg,.jpeg,.png">
+                        <small>If required / في حال كان البناء يتطلب ملجأ</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Payment Information / معلومات الدفع</h3>
+                    <div class="payment-summary">
+                        <div class="payment-item">
+                            <span>Service Fee / رسوم الخدمة:</span>
+                            <strong>300,000 LBP</strong>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Type / نوع الدفع *</label>
+                        <select name="paymentType" class="form-select" required onchange="togglePaymentFields('occupancy-permit')">
+                            <option value="">Select payment type / اختر نوع الدفع</option>
+                            <option value="online">Pay Online / الدفع عبر الإنترنت</option>
+                            <option value="in-person">Pay In Person / الدفع في المكتب</option>
+                        </select>
+                    </div>
+                    <div class="online-payment-fields" id="occupancy-permit-online-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>Payment Method / طريقة الدفع *</label>
+                            <select name="paymentMethod" class="form-select" id="occupancy-permit-paymentMethod">
+                                <option value="">Select payment method / اختر طريقة الدفع</option>
+                                <option value="Credit Card">Credit Card / بطاقة ائتمانية</option>
+                                <option value="Bank Transfer">Bank Transfer / تحويل بنكي</option>
+                                <option value="Mobile Payment">Mobile Payment / دفع عبر الهاتف</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number / رقم البطاقة</label>
+                            <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                            <small>Required for Credit Card payment / مطلوب للدفع بالبطاقة الائتمانية</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Cardholder Name / اسم حامل البطاقة</label>
+                            <input type="text" name="cardholderName" placeholder="John Doe">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expiry Date / تاريخ الانتهاء</label>
+                                <input type="text" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV / رمز الأمان</label>
+                                <input type="text" name="cvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeRequestForm('occupancy-permit')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-credit-card"></i>
+                        Submit & Pay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Zoning Certificate Form -->
+    <div id="zoning-certificate-form" class="request-form-modal">
+        <div class="request-form-content">
+            <div class="request-form-header">
+                <h2>📝 Zoning & Servitude Certificate / طلب إفادة تخطيط وارتفاق</h2>
+                <button class="form-close" onclick="closeRequestForm('zoning-certificate')">&times;</button>
+            </div>
+            <form id="form-zoning-certificate" class="request-form" data-request-type="zoning-certificate">
+                <div class="form-section">
+                    <h3>Personal Information / المعلومات الشخصية</h3>
+                    <div class="form-group">
+                        <label>Full Name / الاسم الكامل *</label>
+                        <input type="text" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email / البريد الإلكتروني *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number / رقم الهاتف *</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Required Documents / المستندات المطلوبة</h3>
+                    <div class="form-group">
+                        <label>Written Application / طلب خطي موقع *</label>
+                        <input type="file" name="writtenApplication" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>Signed by concerned party / موقع من صاحب العلاقة</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Comprehensive Real Estate Certificate / إفادة عقارية شاملة *</label>
+                        <input type="file" name="realEstateCert" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Recent / بتاريخ حديث</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Cadastral Map / خريطة مساحة للعقار *</label>
+                        <input type="file" name="cadastralMap" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Certified by relevant authorities / مصدقة من الجهات المختصة</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Receipt / إيصال دفع رسم التخطيط والارتفاق *</label>
+                        <input type="file" name="paymentReceipt" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Payment receipt for zoning and servitude fee / إيصال دفع رسم التخطيط والارتفاق</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Payment Information / معلومات الدفع</h3>
+                    <div class="payment-summary">
+                        <div class="payment-item">
+                            <span>Service Fee / رسوم الخدمة:</span>
+                            <strong>150,000 LBP</strong>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Type / نوع الدفع *</label>
+                        <select name="paymentType" class="form-select" required onchange="togglePaymentFields('zoning-certificate')">
+                            <option value="">Select payment type / اختر نوع الدفع</option>
+                            <option value="online">Pay Online / الدفع عبر الإنترنت</option>
+                            <option value="in-person">Pay In Person / الدفع في المكتب</option>
+                        </select>
+                    </div>
+                    <div class="online-payment-fields" id="zoning-certificate-online-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>Payment Method / طريقة الدفع *</label>
+                            <select name="paymentMethod" class="form-select" id="zoning-certificate-paymentMethod">
+                                <option value="">Select payment method / اختر طريقة الدفع</option>
+                                <option value="Credit Card">Credit Card / بطاقة ائتمانية</option>
+                                <option value="Bank Transfer">Bank Transfer / تحويل بنكي</option>
+                                <option value="Mobile Payment">Mobile Payment / دفع عبر الهاتف</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number / رقم البطاقة</label>
+                            <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                            <small>Required for Credit Card payment / مطلوب للدفع بالبطاقة الائتمانية</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Cardholder Name / اسم حامل البطاقة</label>
+                            <input type="text" name="cardholderName" placeholder="John Doe">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expiry Date / تاريخ الانتهاء</label>
+                                <input type="text" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV / رمز الأمان</label>
+                                <input type="text" name="cvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeRequestForm('zoning-certificate')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-credit-card"></i>
+                        Submit & Pay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Property Content Certificate Form -->
+    <div id="property-content-form" class="request-form-modal">
+        <div class="request-form-content">
+            <div class="request-form-header">
+                <h2>📄 Property Content Certificate / طلب إفادة محتويات</h2>
+                <button class="form-close" onclick="closeRequestForm('property-content')">&times;</button>
+            </div>
+            <form id="form-property-content" class="request-form" data-request-type="property-content">
+                <div class="form-section">
+                    <h3>Personal Information / المعلومات الشخصية</h3>
+                    <div class="form-group">
+                        <label>Full Name / الاسم الكامل *</label>
+                        <input type="text" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email / البريد الإلكتروني *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number / رقم الهاتف *</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Personal ID / الهوية الشخصية *</label>
+                        <input type="file" name="personalId" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>For concerned party or agent / لصاحب العلاقة أو الوكيل</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Required Documents / المستندات المطلوبة</h3>
+                    <div class="form-group">
+                        <label>Written Application / طلب خطي موقع *</label>
+                        <input type="file" name="writtenApplication" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>Signed by concerned party or legal representative / موقع من صاحب العلاقة أو من ينوب عنه قانوناً</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Real Estate Certificate or Ownership Deed / إفادة عقارية أو سند تمليك *</label>
+                        <input type="file" name="realEstateOrDeed" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Comprehensive Real Estate Certificate or copy of Ownership Deed / إفادة عقارية شاملة أو صورة عن سند التمليك</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Occupancy Permit or Partition Maps / رخصة إسكان أو خرائط الإفراز *</label>
+                        <input type="file" name="occupancyOrPartition" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Occupancy Permit or partition maps if building is subdivided / رخصة إسكان أو صورة عن خرائط الإفراز</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Financial Clearance / براءة ذمة مالية</label>
+                        <input type="file" name="financialClearance" accept=".pdf,.jpg,.jpeg,.png">
+                        <small>Proof of payment of due municipal fees (if required) / تسديد الرسوم البلدية المتوجبة</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Payment Information / معلومات الدفع</h3>
+                    <div class="payment-summary">
+                        <div class="payment-item">
+                            <span>Service Fee / رسوم الخدمة:</span>
+                            <strong>100,000 LBP</strong>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Type / نوع الدفع *</label>
+                        <select name="paymentType" class="form-select" required onchange="togglePaymentFields('property-content')">
+                            <option value="">Select payment type / اختر نوع الدفع</option>
+                            <option value="online">Pay Online / الدفع عبر الإنترنت</option>
+                            <option value="in-person">Pay In Person / الدفع في المكتب</option>
+                        </select>
+                    </div>
+                    <div class="online-payment-fields" id="property-content-online-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>Payment Method / طريقة الدفع *</label>
+                            <select name="paymentMethod" class="form-select" id="property-content-paymentMethod">
+                                <option value="">Select payment method / اختر طريقة الدفع</option>
+                                <option value="Credit Card">Credit Card / بطاقة ائتمانية</option>
+                                <option value="Bank Transfer">Bank Transfer / تحويل بنكي</option>
+                                <option value="Mobile Payment">Mobile Payment / دفع عبر الهاتف</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number / رقم البطاقة</label>
+                            <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                            <small>Required for Credit Card payment / مطلوب للدفع بالبطاقة الائتمانية</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Cardholder Name / اسم حامل البطاقة</label>
+                            <input type="text" name="cardholderName" placeholder="John Doe">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expiry Date / تاريخ الانتهاء</label>
+                                <input type="text" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV / رمز الأمان</label>
+                                <input type="text" name="cvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeRequestForm('property-content')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-credit-card"></i>
+                        Submit & Pay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Violation Settlement Form -->
+    <div id="violation-settlement-form" class="request-form-modal">
+        <div class="request-form-content">
+            <div class="request-form-header">
+                <h2>💔 Building Violation Settlement / طلب تسوية مخالفة بناء</h2>
+                <button class="form-close" onclick="closeRequestForm('violation-settlement')">&times;</button>
+            </div>
+            <form id="form-violation-settlement" class="request-form" data-request-type="violation-settlement">
+                <div class="form-section">
+                    <h3>Personal Information / المعلومات الشخصية</h3>
+                    <div class="form-group">
+                        <label>Full Name / الاسم الكامل *</label>
+                        <input type="text" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email / البريد الإلكتروني *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number / رقم الهاتف *</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Required Documents / المستندات المطلوبة</h3>
+                    <div class="form-group">
+                        <label>Written Application and Declaration / طلب خطي وتصريح *</label>
+                        <input type="file" name="applicationDeclaration" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>Declaration stating desire to settle violation / تصريح يعلن فيه رغبته بتسوية المخالفة</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Official Subdivision Map / خريطة إفراز رسمية ونهائية</label>
+                        <input type="file" name="subdivisionMap" accept=".pdf,.jpg,.jpeg,.png">
+                        <small>If property is subdivided / إذا كان العقار مفرزاً</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Engineering Maps and Plans / مخططات ورسومات هندسية *</label>
+                        <input type="file" name="engineeringPlans" accept=".pdf,.jpg,.jpeg,.png" multiple required>
+                        <small>Detailed plans showing violation location, signed by engineer / مفصلة تبين المخالفة وموقعها، موقعة من المهندس</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Engineer's Pledge / تعهد من المهندس *</label>
+                        <input type="file" name="engineerPledge" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>Pledge that violation does not pose danger / بأن المخالفة لا تشكل خطراً</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Mayor's Certificate / إفادة من رئيس البلدية *</label>
+                        <input type="file" name="mayorCertificate" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Specifying date of completion of violating construction / تحدد تاريخ إنجاز البناء المخالف</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Building Legality Certificate / إفادة تثبت قانونية البناء *</label>
+                        <input type="file" name="legalityCertificate" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Proving legality of existing building / تثبت قانونية البناء القائم</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Building Facade Photographs / صور فوتوغرافية للواجهات *</label>
+                        <input type="file" name="facadePhotos" accept=".jpg,.jpeg,.png" multiple required>
+                        <small>Four recent photographs of all four facades / أربع صور حديثة وواضحة لواجهات البناء الأربعة</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Violation Report / محضر الضبط</label>
+                        <input type="file" name="violationReport" accept=".pdf,.jpg,.jpeg,.png">
+                        <small>If one was issued / في حال وجوده</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Payment Information / معلومات الدفع</h3>
+                    <div class="payment-summary">
+                        <div class="payment-item">
+                            <span>Service Fee / رسوم الخدمة:</span>
+                            <strong>1,000,000 LBP</strong>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Type / نوع الدفع *</label>
+                        <select name="paymentType" class="form-select" required onchange="togglePaymentFields('violation-settlement')">
+                            <option value="">Select payment type / اختر نوع الدفع</option>
+                            <option value="online">Pay Online / الدفع عبر الإنترنت</option>
+                            <option value="in-person">Pay In Person / الدفع في المكتب</option>
+                        </select>
+                    </div>
+                    <div class="online-payment-fields" id="violation-settlement-online-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>Payment Method / طريقة الدفع *</label>
+                            <select name="paymentMethod" class="form-select" id="violation-settlement-paymentMethod">
+                                <option value="">Select payment method / اختر طريقة الدفع</option>
+                                <option value="Credit Card">Credit Card / بطاقة ائتمانية</option>
+                                <option value="Bank Transfer">Bank Transfer / تحويل بنكي</option>
+                                <option value="Mobile Payment">Mobile Payment / دفع عبر الهاتف</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number / رقم البطاقة</label>
+                            <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                            <small>Required for Credit Card payment / مطلوب للدفع بالبطاقة الائتمانية</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Cardholder Name / اسم حامل البطاقة</label>
+                            <input type="text" name="cardholderName" placeholder="John Doe">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expiry Date / تاريخ الانتهاء</label>
+                                <input type="text" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV / رمز الأمان</label>
+                                <input type="text" name="cvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeRequestForm('violation-settlement')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-credit-card"></i>
+                        Submit & Pay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Subdivision Request Form -->
+    <div id="subdivision-form" class="request-form-modal">
+        <div class="request-form-content">
+            <div class="request-form-header">
+                <h2>🗺 Subdivision Request / طلب إفراز (تقسيم عقار)</h2>
+                <button class="form-close" onclick="closeRequestForm('subdivision')">&times;</button>
+            </div>
+            <form id="form-subdivision" class="request-form" data-request-type="subdivision">
+                <div class="form-section">
+                    <h3>Personal Information / المعلومات الشخصية</h3>
+                    <div class="form-group">
+                        <label>Full Name / الاسم الكامل *</label>
+                        <input type="text" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email / البريد الإلكتروني *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number / رقم الهاتف *</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Required Documents / المستندات المطلوبة</h3>
+                    <div class="form-group">
+                        <label>Written Application / طلب خطي موقع *</label>
+                        <input type="file" name="writtenApplication" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>Signed by property owner or legal representative / موقع من صاحب العقار أو من يمثله قانوناً</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Comprehensive Real Estate Certificate / إفادة عقارية شاملة *</label>
+                        <input type="file" name="realEstateCert" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Recent (not older than 3 months) / بتاريخ حديث (لا تتجاوز 3 أشهر)</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Zoning and Servitude Certificate / إفادة تخطيط وارتفاق *</label>
+                        <input type="file" name="zoningCert" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Recent / بتاريخ حديث</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Subdivision Project / مشروع الإفراز *</label>
+                        <input type="file" name="subdivisionProject" accept=".pdf,.jpg,.jpeg,.png" multiple required>
+                        <small>Five copies signed by certified surveyor / خمس نسخ موقعة من مساح محلف ومسجلة لدى نقابة الطوبوغرافيين</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Cadastral Map / مصور مساحة للعقار *</label>
+                        <input type="file" name="cadastralMap" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Issued by Cadaster Directorate / صادر عن دائرة المساحة</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Statement of Resulting Plots / بيان بعدد القطع الناتجة *</label>
+                        <input type="file" name="plotsStatement" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>Number of resulting plots and purpose / بيان بعدد القطع الناتجة والغاية من الإفراز</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Right of Way Statement / بيان بحق المرور</label>
+                        <input type="file" name="rightOfWay" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                        <small>If property is not connected to public road / إذا لم يكن العقار متصلاً بطريق عام</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Payment Information / معلومات الدفع</h3>
+                    <div class="payment-summary">
+                        <div class="payment-item">
+                            <span>Service Fee / رسوم الخدمة:</span>
+                            <strong>750,000 LBP</strong>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Type / نوع الدفع *</label>
+                        <select name="paymentType" class="form-select" required onchange="togglePaymentFields('subdivision')">
+                            <option value="">Select payment type / اختر نوع الدفع</option>
+                            <option value="online">Pay Online / الدفع عبر الإنترنت</option>
+                            <option value="in-person">Pay In Person / الدفع في المكتب</option>
+                        </select>
+                    </div>
+                    <div class="online-payment-fields" id="subdivision-online-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>Payment Method / طريقة الدفع *</label>
+                            <select name="paymentMethod" class="form-select" id="subdivision-paymentMethod">
+                                <option value="">Select payment method / اختر طريقة الدفع</option>
+                                <option value="Credit Card">Credit Card / بطاقة ائتمانية</option>
+                                <option value="Bank Transfer">Bank Transfer / تحويل بنكي</option>
+                                <option value="Mobile Payment">Mobile Payment / دفع عبر الهاتف</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number / رقم البطاقة</label>
+                            <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                            <small>Required for Credit Card payment / مطلوب للدفع بالبطاقة الائتمانية</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Cardholder Name / اسم حامل البطاقة</label>
+                            <input type="text" name="cardholderName" placeholder="John Doe">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expiry Date / تاريخ الانتهاء</label>
+                                <input type="text" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV / رمز الأمان</label>
+                                <input type="text" name="cvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeRequestForm('subdivision')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-credit-card"></i>
+                        Submit & Pay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Financial Clearance Form -->
+    <div id="financial-clearance-form" class="request-form-modal">
+        <div class="request-form-content">
+            <div class="request-form-header">
+                <h2>📜 Municipal Financial Clearance / طلب براءة ذمة بلدية</h2>
+                <button class="form-close" onclick="closeRequestForm('financial-clearance')">&times;</button>
+            </div>
+            <form id="form-financial-clearance" class="request-form" data-request-type="financial-clearance">
+                <div class="form-section">
+                    <h3>Personal Information / المعلومات الشخصية</h3>
+                    <div class="form-group">
+                        <label>Full Name / الاسم الكامل *</label>
+                        <input type="text" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email / البريد الإلكتروني *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number / رقم الهاتف *</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Required Documents / المستندات المطلوبة</h3>
+                    <div class="form-group">
+                        <label>Written Application / طلب خطي *</label>
+                        <input type="file" name="writtenApplication" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>Submitted by concerned party or agent / مقدم من صاحب العلاقة أو وكيله</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Ownership Deed or Sales Document / سند الملكية أو مستند بيع *</label>
+                        <input type="file" name="ownershipOrSales" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Copy of Ownership Deed or sales document / صورة عن سند الملكية أو مستند بيع</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Comprehensive Real Estate Certificate / إفادة عقارية شاملة *</label>
+                        <input type="file" name="realEstateCert" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Not older than three months / لا يعود تاريخها لأكثر من ثلاثة أشهر</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Subdivision Map / خريطة إفراز</label>
+                        <input type="file" name="subdivisionMap" accept=".pdf,.jpg,.jpeg,.png">
+                        <small>If property is subdivided / إذا كان العقار مفرزاً</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Building Legality Document / مستند قانونية البناء *</label>
+                        <input type="file" name="buildingLegality" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Occupancy Permit or similar / مثل رخصة الإشغال لتحديد الرسوم المتوجبة</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Receipts / إيصالات تسديد الرسوم *</label>
+                        <input type="file" name="paymentReceipts" accept=".pdf,.jpg,.jpeg,.png" multiple required>
+                        <small>All municipal taxes and fees paid up to application date / كافة الرسوم والعوائد البلدية المتوجبة حتى تاريخ الطلب</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Payment Information / معلومات الدفع</h3>
+                    <div class="payment-summary">
+                        <div class="payment-item">
+                            <span>Service Fee / رسوم الخدمة:</span>
+                            <strong>200,000 LBP</strong>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Type / نوع الدفع *</label>
+                        <select name="paymentType" class="form-select" required onchange="togglePaymentFields('financial-clearance')">
+                            <option value="">Select payment type / اختر نوع الدفع</option>
+                            <option value="online">Pay Online / الدفع عبر الإنترنت</option>
+                            <option value="in-person">Pay In Person / الدفع في المكتب</option>
+                        </select>
+                    </div>
+                    <div class="online-payment-fields" id="financial-clearance-online-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>Payment Method / طريقة الدفع *</label>
+                            <select name="paymentMethod" class="form-select" id="financial-clearance-paymentMethod">
+                                <option value="">Select payment method / اختر طريقة الدفع</option>
+                                <option value="Credit Card">Credit Card / بطاقة ائتمانية</option>
+                                <option value="Bank Transfer">Bank Transfer / تحويل بنكي</option>
+                                <option value="Mobile Payment">Mobile Payment / دفع عبر الهاتف</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number / رقم البطاقة</label>
+                            <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                            <small>Required for Credit Card payment / مطلوب للدفع بالبطاقة الائتمانية</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Cardholder Name / اسم حامل البطاقة</label>
+                            <input type="text" name="cardholderName" placeholder="John Doe">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expiry Date / تاريخ الانتهاء</label>
+                                <input type="text" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV / رمز الأمان</label>
+                                <input type="text" name="cvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeRequestForm('financial-clearance')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-credit-card"></i>
+                        Submit & Pay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Advertisement Permit Form -->
+    <div id="advertisement-permit-form" class="request-form-modal">
+        <div class="request-form-content">
+            <div class="request-form-header">
+                <h2>🖼 Permanent Advertisement Permit / طلب ترخيص للإعلان الدائم</h2>
+                <button class="form-close" onclick="closeRequestForm('advertisement-permit')">&times;</button>
+            </div>
+            <form id="form-advertisement-permit" class="request-form" data-request-type="advertisement-permit">
+                <div class="form-section">
+                    <h3>Personal Information / المعلومات الشخصية</h3>
+                    <div class="form-group">
+                        <label>Full Name / الاسم الكامل *</label>
+                        <input type="text" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email / البريد الإلكتروني *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number / رقم الهاتف *</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Required Documents / المستندات المطلوبة</h3>
+                    <div class="form-group">
+                        <label>Signed Application / طلب موقّع *</label>
+                        <input type="file" name="signedApplication" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                        <small>From concerned party or legal agent / من صاحب العلاقة أو وكيله القانوني</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Real Estate Certificate / إفادة عقارية *</label>
+                        <input type="file" name="realEstateCert" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>For property where advertisement will be placed (not older than 3 months) / للعقار الذي سيوضع الإعلان فيه (لا تتجاوز 3 أشهر)</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Zoning and Servitude Certificate / إفادة تخطيط وارتفاق *</label>
+                        <input type="file" name="zoningCert" accept=".pdf,.jpg,.jpeg,.png" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Insurance Policy / بوليصة تأمين *</label>
+                        <input type="file" name="insurancePolicy" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Mandatory liability insurance for the advertising board / للوحة الإعلانية ضد الغير (تأمين إلزامي)</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Site Map and Advertisement Board Map / خريطة الموقع وخريطة اللوحة الإعلانية *</label>
+                        <input type="file" name="siteAndBoardMaps" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small>Showing measurements and mounting method / تبين القياسات وطريقة التثبيت</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Site Photograph / صورة فوتوغرافية للموقع *</label>
+                        <input type="file" name="sitePhotograph" accept=".jpg,.jpeg,.png" required>
+                        <small>Of site and surrounding environment with board location indicated / للموقع والبيئة المحيطة مع تحديد موقع اللوحة</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Engineering Study / دراسة هندسية</label>
+                        <input type="file" name="engineeringStudy" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                        <small>For structure and chassis (for large/rooftop signs) / للهيكل والشاسيه (للوحات الكبيرة أو على الأسطح)</small>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Payment Information / معلومات الدفع</h3>
+                    <div class="payment-summary">
+                        <div class="payment-item">
+                            <span>Service Fee / رسوم الخدمة:</span>
+                            <strong>400,000 LBP</strong>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Type / نوع الدفع *</label>
+                        <select name="paymentType" class="form-select" required onchange="togglePaymentFields('advertisement-permit')">
+                            <option value="">Select payment type / اختر نوع الدفع</option>
+                            <option value="online">Pay Online / الدفع عبر الإنترنت</option>
+                            <option value="in-person">Pay In Person / الدفع في المكتب</option>
+                        </select>
+                    </div>
+                    <div class="online-payment-fields" id="advertisement-permit-online-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>Payment Method / طريقة الدفع *</label>
+                            <select name="paymentMethod" class="form-select" id="advertisement-permit-paymentMethod">
+                                <option value="">Select payment method / اختر طريقة الدفع</option>
+                                <option value="Credit Card">Credit Card / بطاقة ائتمانية</option>
+                                <option value="Bank Transfer">Bank Transfer / تحويل بنكي</option>
+                                <option value="Mobile Payment">Mobile Payment / دفع عبر الهاتف</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number / رقم البطاقة</label>
+                            <input type="text" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                            <small>Required for Credit Card payment / مطلوب للدفع بالبطاقة الائتمانية</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Cardholder Name / اسم حامل البطاقة</label>
+                            <input type="text" name="cardholderName" placeholder="John Doe">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expiry Date / تاريخ الانتهاء</label>
+                                <input type="text" name="expiryDate" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV / رمز الأمان</label>
+                                <input type="text" name="cvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeRequestForm('advertisement-permit')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-credit-card"></i>
+                        Submit & Pay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Modal for notifications -->
     <div id="modal" class="modal">
@@ -960,6 +1795,246 @@
             margin-top: var(--spacing-xs);
         }
         
+        /* Request Types Grid */
+        .request-types-grid {
+            margin-top: var(--spacing-xl);
+        }
+        
+        .request-type-card {
+            background: var(--primary-white);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 2px solid var(--accent-grey);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+        
+        .request-type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px var(--shadow-medium);
+            border-color: var(--accent-blue);
+        }
+        
+        .request-icon {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .request-type-card h3 {
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-sm);
+            font-size: var(--font-size-lg);
+        }
+        
+        .request-arabic {
+            color: var(--accent-blue);
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+            direction: rtl;
+        }
+        
+        .request-description {
+            color: var(--text-light);
+            font-size: var(--font-size-sm);
+            margin: 0;
+        }
+        
+        .request-price {
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-green) 100%);
+            color: var(--primary-white);
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            display: inline-block;
+        }
+        
+        /* Request Form Modal */
+        .request-form-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+        }
+        
+        .request-form-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .request-form-content {
+            background: var(--primary-white);
+            border-radius: var(--radius-2xl);
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px var(--shadow-medium);
+            margin: auto;
+        }
+        
+        .request-form-header {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-green) 100%);
+            color: var(--primary-white);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .request-form-header h2 {
+            margin: 0;
+            font-size: var(--font-size-2xl);
+        }
+        
+        .form-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--primary-white);
+            font-size: var(--font-size-2xl);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-normal);
+        }
+        
+        .form-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .request-form {
+            padding: var(--spacing-xl);
+        }
+        
+        .form-section {
+            margin-bottom: var(--spacing-2xl);
+        }
+        
+        .form-section h3 {
+            color: var(--text-dark);
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--accent-grey);
+        }
+        
+        .request-form .form-group {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .request-form .form-group label {
+            display: block;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            font-size: var(--font-size-base);
+        }
+        
+        .request-form .form-group input[type="text"],
+        .request-form .form-group input[type="email"],
+        .request-form .form-group input[type="tel"],
+        .request-form .form-group input[type="file"],
+        .request-form .form-group select {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 2px solid var(--accent-grey);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-base);
+            transition: all var(--transition-normal);
+            background: var(--primary-white);
+        }
+        
+        .request-form .form-group select {
+            cursor: pointer;
+        }
+        
+        .request-form .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+        
+        .payment-summary {
+            background: var(--secondary-grey);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-lg);
+            border: 2px solid var(--accent-grey);
+        }
+        
+        .payment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--font-size-lg);
+        }
+        
+        .payment-item span {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .payment-item strong {
+            color: var(--accent-blue);
+            font-size: var(--font-size-xl);
+        }
+        
+        .request-form .form-group input[type="text"]:focus,
+        .request-form .form-group input[type="email"]:focus,
+        .request-form .form-group input[type="tel"]:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .request-form .form-group input[type="file"] {
+            padding: var(--spacing-sm);
+            cursor: pointer;
+        }
+        
+        .request-form .form-group small {
+            display: block;
+            color: var(--text-light);
+            font-size: var(--font-size-sm);
+            margin-top: var(--spacing-xs);
+            font-style: italic;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: flex-end;
+            padding-top: var(--spacing-xl);
+            border-top: 2px solid var(--accent-grey);
+            margin-top: var(--spacing-2xl);
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .services-nav {
@@ -991,6 +2066,61 @@
             .chatbot-container {
                 width: 300px;
                 height: 350px;
+            }
+            
+            .request-types-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-md);
+            }
+            
+            .request-type-card {
+                padding: var(--spacing-md);
+            }
+            
+            .request-icon {
+                font-size: 2rem;
+            }
+            
+            .request-type-card h3 {
+                font-size: var(--font-size-base);
+            }
+            
+            .request-form-content {
+                max-width: 95%;
+                max-height: 95vh;
+                margin: var(--spacing-md);
+            }
+            
+            .request-form-header h2 {
+                font-size: var(--font-size-lg);
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .form-actions button {
+                width: 100%;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-sm);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .request-types-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .request-price {
+                font-size: var(--font-size-base);
             }
         }
     </style>
