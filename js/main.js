@@ -551,6 +551,14 @@ function showModal(title, content) {
 }
 
 function closeModal() {
+    // Close any active modal(s)
+    const activeModals = document.querySelectorAll('.modal.active');
+    if (activeModals.length > 0) {
+        activeModals.forEach(m => m.classList.remove('active'));
+        document.body.style.overflow = 'auto';
+        return;
+    }
+    // Fallback to legacy single modal by id
     const modal = document.getElementById('modal');
     if (modal) {
         modal.classList.remove('active');
@@ -641,23 +649,14 @@ function toggleTheme() {
 // ===== ADMIN DASHBOARD FUNCTIONS =====
 function loadAdminDashboard() {
     if (!currentUser) {
-        const storedUser = localStorage.getItem('currentUser');
-        if (storedUser) {
-            currentUser = JSON.parse(storedUser);
-        }
+        currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
-
+    
     if (!currentUser) {
-        if (typeof showLoginSection === 'function') {
-            showLoginSection();
-        }
+        window.location.href = 'admin.html';
         return;
     }
-
-    if (typeof showAdminDashboard === 'function') {
-        showAdminDashboard();
-    }
-
+    
     loadRequestsTable();
     loadComplaintsTable();
     loadPollsTable();
@@ -968,9 +967,7 @@ function initializePage() {
     
     switch (currentPage) {
         case 'admin.html':
-            if (localStorage.getItem('currentUser')) {
-                loadAdminDashboard();
-            }
+            // Admin page manages its own flow (login → dashboard) via inline script
             break;
         case 'dashboard.html':
             initializeDashboardCharts();

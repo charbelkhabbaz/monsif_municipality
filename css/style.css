@@ -9,15 +9,15 @@
 
 :root {
     /* Color Palette */
-    --primary-white: #ffffff;
-    --secondary-grey: #f8f9fa;
-    --accent-grey: #e9ecef;
-    --text-dark: #2c3e50;
-    --text-light: #6c757d;
-    --accent-green: #28a745;
-    --accent-blue: #007bff;
-    --shadow-light: rgba(0, 0, 0, 0.1);
-    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --primary-white: #fefefe;
+    --secondary-grey: #ddf7f7;
+    --accent-grey: #99c7cc;
+    --text-dark: #1f2e33;
+    --text-light: #4c6166;
+    --accent-green: #c3b498;
+    --accent-blue: #2f98a5;
+    --shadow-light: rgba(47, 152, 165, 0.12);
+    --shadow-medium: rgba(31, 46, 51, 0.18);
     
     /* Typography */
     --font-primary: 'Poppins', 'Inter', 'Open Sans', sans-serif;
@@ -149,9 +149,19 @@ a:hover {
     gap: var(--spacing-sm);
 }
 
-.logo::before {
-    content: "🏛️";
-    font-size: var(--font-size-2xl);
+.logo a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: inherit;
+    text-decoration: none;
+}
+
+.logo-image {
+    height: 48px;
+    width: auto;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 8px var(--shadow-light);
 }
 
 .nav-menu {
@@ -518,6 +528,10 @@ a:hover {
     .container {
         padding: 0 var(--spacing-md);
     }
+
+    .logo-image {
+        height: 40px;
+    }
     
     .nav-menu {
         position: fixed;
@@ -578,6 +592,10 @@ a:hover {
     .stats-grid {
         grid-template-columns: 1fr;
     }
+
+    .logo-image {
+        height: 32px;
+    }
     
     .hero-title {
         font-size: var(--font-size-2xl);
@@ -591,11 +609,11 @@ a:hover {
 
 /* ===== DARK MODE TOGGLE ===== */
 .dark-mode {
-    --primary-white: #1a1a1a;
-    --secondary-grey: #2d2d2d;
-    --accent-grey: #404040;
-    --text-dark: #ffffff;
-    --text-light: #b0b0b0;
+    --primary-white: #0f1a1c;
+    --secondary-grey: #152426;
+    --accent-grey: #1f3c42;
+    --text-dark: #fefefe;
+    --text-light: #99c7cc;
 }
 
 .theme-toggle {
