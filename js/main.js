@@ -641,14 +641,23 @@ function toggleTheme() {
 // ===== ADMIN DASHBOARD FUNCTIONS =====
 function loadAdminDashboard() {
     if (!currentUser) {
-        currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const storedUser = localStorage.getItem('currentUser');
+        if (storedUser) {
+            currentUser = JSON.parse(storedUser);
+        }
     }
-    
+
     if (!currentUser) {
-        window.location.href = 'admin.html';
+        if (typeof showLoginSection === 'function') {
+            showLoginSection();
+        }
         return;
     }
-    
+
+    if (typeof showAdminDashboard === 'function') {
+        showAdminDashboard();
+    }
+
     loadRequestsTable();
     loadComplaintsTable();
     loadPollsTable();
@@ -959,7 +968,9 @@ function initializePage() {
     
     switch (currentPage) {
         case 'admin.html':
-            loadAdminDashboard();
+            if (localStorage.getItem('currentUser')) {
+                loadAdminDashboard();
+            }
             break;
         case 'dashboard.html':
             initializeDashboardCharts();
