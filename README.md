@@ -193,26 +193,5 @@ The application includes comprehensive mock data for demonstration:
 - Municipal news articles
 - User statistics and metrics
 
-## 🔮 Future Enhancements
-
-- Backend API integration
-- Real payment processing
-- Advanced analytics
-- Multi-language support (Arabic)
-- Mobile app development
-- Real-time notifications
-
-## 📞 Support
-
-For technical support or questions:
-- Email: info@monsif.gov.lb
-- Phone: +961-XX-XXXXXX
-- Office Hours: Mon-Fri 8:00 AM - 4:00 PM
-
-## 📄 License
-
-© 2024 Monsif Municipality. All rights reserved.
-
----
-
 **Built with ❤️ for the citizens of Monsif, Lebanon**
+
